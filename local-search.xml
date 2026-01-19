@@ -20,6 +20,8 @@
     
     <tags>
       
+      <tag>Linux</tag>
+      
       <tag>Network Engineering</tag>
       
       <tag>OpenWrt</tag>
@@ -27,8 +29,6 @@
       <tag>Home Lab</tag>
       
       <tag>Cloudflare Zero Trust</tag>
-      
-      <tag>Linux</tag>
       
     </tags>
     
@@ -53,9 +53,9 @@
     
     <tags>
       
-      <tag>Linux</tag>
-      
       <tag>VPS</tag>
+      
+      <tag>Linux</tag>
       
       <tag>Security</tag>
       
