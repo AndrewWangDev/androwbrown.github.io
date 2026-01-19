@@ -19,28 +19,27 @@
   <meta name="author" content="Andrew Wang Dev">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文介绍了DNS污染与劫持的原理、如何使用OpenClash和AdguardHome在软路由上搭建家庭局域网私人DNS，实现连接Wifi即可去广告和翻墙。">
+    <meta name="description" content="Why connecting via direct IP fails due to SNI, how DNS spoofing works, and why I advise against naive split-tunneling strategies in proxy clients.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Openwrt上通过AdguardHome和OpenClash部署私人DNS">
+<meta property="og:title" content="Understanding DNS Leaks and Risks in Split-Tunneling Networks">
 <meta property="og:url" content="https://androwsblog.dpdns.org/2025/08/16/hello-world/index.html">
 <meta property="og:site_name" content="Andrew&#39;s Blog">
-<meta property="og:description" content="本文介绍了DNS污染与劫持的原理、如何使用OpenClash和AdguardHome在软路由上搭建家庭局域网私人DNS，实现连接Wifi即可去广告和翻墙。">
+<meta property="og:description" content="Why connecting via direct IP fails due to SNI, how DNS spoofing works, and why I advise against naive split-tunneling strategies in proxy clients.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://androwsblog.dpdns.org/img/dns.png">
-<meta property="og:image" content="https://androwsblog.dpdns.org/img/clash.png">
 <meta property="article:published_time" content="2025-08-15T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-12-15T20:53:26.701Z">
+<meta property="article:modified_time" content="2026-01-19T05:44:40.678Z">
 <meta property="article:author" content="Andrew Wang Dev">
 <meta property="article:tag" content="DNS">
-<meta property="article:tag" content="翻墙">
+<meta property="article:tag" content="Network Security">
 <meta property="article:tag" content="OpenClash">
-<meta property="article:tag" content="AdguardHome">
+<meta property="article:tag" content="AdGuardHome">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://androwsblog.dpdns.org/img/dns.png">
   
   
   
-  <title>Openwrt上通过AdguardHome和OpenClash部署私人DNS - Andrew&#39;s Blog</title>
+  <title>Understanding DNS Leaks and Risks in Split-Tunneling Networks - Andrew&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +183,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/dynamic/" target="_self">
                 
-                <span>Personal Space</span>
+                <span>Activity</span>
               </a>
             </li>
           
@@ -218,7 +217,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Openwrt上通过AdguardHome和OpenClash部署私人DNS"></span>
+            <span id="subtitle" data-typed-text="Understanding DNS Leaks and Risks in Split-Tunneling Networks"></span>
           
         </div>
 
@@ -241,7 +240,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1k words
+          124 words
         
       </span>
     
@@ -252,7 +251,7 @@
         
         
         
-          9 mins
+          2 mins
         
       </span>
     
@@ -289,27 +288,49 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Openwrt上通过AdguardHome和OpenClash部署私人DNS</h1>
+            <h1 id="seo-header">Understanding DNS Leaks and Risks in Split-Tunneling Networks</h1>
             
             
               <div class="markdown-body">
                 
-                <p>摘要：</p>
+                <p>DNS (Domain Name System) is the phonebook of the Internet. However, because it defaults to UDP port 53 and transmits in plaintext, it is notoriously easy to monitor, spoof, or hijack.</p>
+<h2 id="The-Mechanics-of-DNS"><a href="#The-Mechanics-of-DNS" class="headerlink" title="The Mechanics of DNS"></a>The Mechanics of DNS</h2><h3 id="How-Resolution-Works"><a href="#How-Resolution-Works" class="headerlink" title="How Resolution Works"></a>How Resolution Works</h3><p>When you request a URL, the browser extracts the domain and follows a strict hierarchy: <strong>Browser Cache -&gt; System Hosts -&gt; Network Interface DNS</strong>.</p>
+<p>If not defined locally, the request goes to the recursive resolver (usually your ISP). If the ISP doesn’t have it cached, it initiates an iterative query to the Root, TLD, and Authoritative Name Servers.</p>
+<img src="/img/dns.png" srcset="/img/loading.gif" lazyload alt="DNS Iterative Query Process" style="width: 100%; max-width: 600px; margin: 10px 0;"/>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://www.google.com/search?q=DNS">Search in Google</a></p>
+<h3 id="Spoofing-and-Hijacking"><a href="#Spoofing-and-Hijacking" class="headerlink" title="Spoofing and Hijacking"></a>Spoofing and Hijacking</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nslookup google.com<br><span class="hljs-comment"># Result: Often returns a bogon IP or blackhole address in restricted networks</span><br></code></pre></td></tr></table></figure>
+
+<p>In many network environments, DNS traffic is manipulated in three ways:</p>
+<ol>
+<li><strong>ISP Hijacking</strong>: Local ISPs often monitor UDP:53 to log user data or reduce inter-network settlement costs.</li>
+<li><strong>Middlebox Interference</strong>: At international gateways, traffic matching specific blacklists is spoofed, returning invalid IP addresses (DNS Poisoning).</li>
+<li><strong>Intranet Auditing</strong>: Schools and enterprises often redirect all 53-port traffic to internal audit devices.</li>
+</ol>
+<p>More info: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/DNS_spoofing">Wikipedia: DNS Spoofing</a></p>
+<h3 id="Why-“Direct-IP-Access”-Doesn’t-Work"><a href="#Why-“Direct-IP-Access”-Doesn’t-Work" class="headerlink" title="Why “Direct IP Access” Doesn’t Work"></a>Why “Direct IP Access” Doesn’t Work</h3><p>If DNS is poisoned, why can’t we just type the IP address directly?</p>
+<p>The answer lies in <strong>SNI (Server Name Indication)</strong> used in HTTPS handshakes.</p>
 <ul>
-<li>DNS污染与劫持</li>
-<li>分流策略的潜在风险</li>
-<li>为什么选择ASIS</li>
-<li>搭建局域网私人DNS</li>
+<li>When a client sends a <code>Client Hello</code> packet to establish a TLS connection, it must include the SNI field to tell the server <em>which</em> certificate to present.</li>
+<li>If you access via a raw IP, the SNI field is empty.</li>
+<li>Modern servers (especially CDNs) host thousands of domains on a single IP. Without SNI, the server returns a default (incorrect) certificate, causing the handshake to fail with errors like <code>CERT_COMMON_NAME_INVALID</code>.</li>
 </ul>
-<p>DNS即Domain Name Server,即域名解析服务器，默认53端口、UDP连接、明文传输，可能会受到污染、劫持和监听。</p>
-<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><h3 id="DNS解析过程"><a href="#DNS解析过程" class="headerlink" title="DNS解析过程"></a>DNS解析过程</h3><p>浏览器提取url中域名部分，首先查询浏览器缓存，若未命中，查询系统hosts文件，若未命中，则向出口网卡指定的DNS服务器发送请求。若未指定，则默认为为DHCP握手响应的DNS服务器，即一般是本地ISP的DNS服务器发起递归查询。本地ISP收到DNS请求后，查询缓存，若未命中，则向根（root)、顶级（TLD）及地方权威域名服务器发起迭代查询，如图1。浏览器收到响应后，根据TTL值将域名缓存到本地。<br><img src="/img/dns.png" srcset="/img/loading.gif" lazyload alt="图1：DNS流程"/><br>More info: <a target="_blank" rel="noopener" href="https://www.google.com/search?q=DNS">Search in Google</a></p>
-<h3 id="劫持和污染"><a href="#劫持和污染" class="headerlink" title="劫持和污染"></a>劫持和污染</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nslookup google.com<br></code></pre></td></tr></table></figure>
-<p>1.本地ISP出于审查和减少网间结算的目的，对DNS请求进行记录和劫持；<br>2.在国际入网口，GFW会按照黑名单封锁二级和三级域名，将大量域名污染到黑洞IP；<br>3.学校、企业等部署内网审计设备，通过上游部署旁路由，对53端口流量进行劫持和记录。<br>4.部分国产os会将用户指定的dns更改为受审查的dns。</p>
-<p>More info: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%93%E5%AD%98%E6%B1%A1%E6%9F%93">维基百科：DNS污染</a></p>
-<h3 id="直接输入IP可以吗？"><a href="#直接输入IP可以吗？" class="headerlink" title="直接输入IP可以吗？"></a>直接输入IP可以吗？</h3><p>如果DNS遇到污染，我们直接输入IP能否正常连接？我们知道，对于HTTPS网站，TCP握手后需要先建立安全的套接字协议连接，即TLS连接。如果直接在浏览器中输入IP，浏览器会根据HTTPS协议选择默认端口443。客户端发出sni字段留空的Client Hello请求。如果这个IP托管有多个服务器（证书），由于SNI无效，服务器只能向客户端投递“缺省证书”+公钥+哈希值签名，在客户端进行证书链验证时，会出现证书配置错误，无法进行安全连接。</p>
-<h3 id="不推荐使用分流"><a href="#不推荐使用分流" class="headerlink" title="不推荐使用分流"></a>不推荐使用分流</h3><p>我一向不主张分流策略。对于Clash-Core，分流DNS是不安全的行为。我们以Openwrt下Clash客户端为例。<br><a target="_blank" rel="noopener" href="https://clash.wiki/configuration/dns.html"><img src="/img/clash.png" srcset="/img/loading.gif" lazyload></a><br>OpenClash建立虚拟网卡ech0、注册ip rule，并监听0.0.0.0:53和::1:53。遇DNS请求时，OpenClash会根据域名解析策略（ip on demand&#x2F;ip if not match&#x2F;asls)处理这个域名。<br>clash DNS也有2种处理模式，我们以常见的fake ip模式为例。当没有匹配到域名规则时，OpenClash首先会去匹配fakeip缓存，其次去匹配fakeip过滤器，如果在其中，则使用nameserver直连解析。否则将会建立一项fake ip映射表，真实ip由nameserver+proxy和fallback+proxy并行查询解析，取其最快响应ip。<br>这会造成，如果一个网站在html中通过js嵌入一些如”*.qq.com”的简单请求时，会导致用户的代理匹配基于域名的direct规则，使用直连DNS解析为国内CDN，并通过直连连接，造成了DNS泄漏和IP泄漏。在无跨域错误的情况下，网站可获得危险（实名）的国内IP，对用户造成安全隐患。</p>
-<h3 id="为什么选用ASIS"><a href="#为什么选用ASIS" class="headerlink" title="为什么选用ASIS"></a>为什么选用ASIS</h3><p>若策略为ip if not match，首先clash会匹配基于域名的规则，如匹配到Direct规则，则通过直连DNS直接解析。若没有匹配到基于域名的规则，则使用本地DNS将域名解析为IP，使用IP进行匹配。如果nameserver本身包含域名，则由default nameserver充当其bootloader DNS服务器。如匹配到Proxy规则，则使用Clash DNS解析。<br>若策略为ip on demand，首先clash会使用本地DNS将域名解析为IP，接下来匹配基于域名和IP的规则，进行匹配。<br>这两种策略，都会有本地DNS泄漏的问题。</p>
-<h3 id="我的解决方案：OpenWrt-OpenClash-AdguardHome"><a href="#我的解决方案：OpenWrt-OpenClash-AdguardHome" class="headerlink" title="我的解决方案：OpenWrt+OpenClash+AdguardHome"></a>我的解决方案：OpenWrt+OpenClash+AdguardHome</h3><p>通过Openwrt作旁路由，上游网关指向主路由，主路由用于拨号，盘路由上运行DHCP服务器桥接真实网卡，将网关指向旁路由的静态IP。Adguard Home监听0.0.0.0:53，开启重定向，上游DNS为CLash监听DNS端口，Clash关闭53端口劫持。</p>
+<h2 id="The-Risk-of-Split-Tunneling"><a href="#The-Risk-of-Split-Tunneling" class="headerlink" title="The Risk of Split-Tunneling"></a>The Risk of Split-Tunneling</h2><p>I generally <strong>advise against</strong> simple split-tunneling strategies for sensitive traffic. Using OpenClash as an example, improper DNS routing often leads to privacy leaks.</p>
+<p>OpenClash typically handles DNS requests via a virtual interface. Even with intelligent routing, risks exist.</p>
+<h3 id="The-“Fake-IP”-Fallback-Issue"><a href="#The-“Fake-IP”-Fallback-Issue" class="headerlink" title="The “Fake-IP” Fallback Issue"></a>The “Fake-IP” Fallback Issue</h3><p>In <code>fake-ip</code> mode, if a request doesn’t match a specific rule, the client has to decide how to route it.</p>
+<ol>
+<li>It resolves the domain using both the <strong>Remote&#x2F;Encrypted DNS</strong> and the <strong>Local&#x2F;ISP DNS</strong> in parallel to determine the fastest route.</li>
+<li>If the Local ISP DNS responds faster (which is common for CDNs), the system might accept that IP.</li>
+<li><strong>The Leak</strong>: If the resolved IP triggers a <code>DIRECT</code> rule, the traffic connects directly through your local gateway. This exposes your request to the local ISP, completely bypassing the encryption tunnel.</li>
+</ol>
+<h3 id="Why-“IP-If-Not-Match”-Isn’t-Perfect"><a href="#Why-“IP-If-Not-Match”-Isn’t-Perfect" class="headerlink" title="Why “IP If Not Match” Isn’t Perfect"></a>Why “IP If Not Match” Isn’t Perfect</h3><p>Other strategies like <code>Redir-Host</code> (IP If Not Match) also have flaws. They rely on the local DNS to resolve the domain <em>first</em> to check against IP rules. This initial resolution step itself is a <strong>DNS Leak</strong>—your ISP already knows what domain you are trying to resolve before the proxy client even decides whether to proxy it.</p>
+<h2 id="My-Solution-The-“Clean-Separation”-Architecture"><a href="#My-Solution-The-“Clean-Separation”-Architecture" class="headerlink" title="My Solution: The “Clean Separation” Architecture"></a>My Solution: The “Clean Separation” Architecture</h2><p>To fix this, I separate DNS resolution from traffic routing:</p>
+<ol>
+<li><strong>OpenWrt</strong> acts as the gateway.</li>
+<li><strong>AdGuard Home</strong> listens on port 53, handling ad-blocking and forwarding upstream queries.</li>
+<li><strong>OpenClash</strong> (listening on a non-standard port) takes over the upstream DNS over encrypted channels (DoH&#x2F;DoT), ensuring no fallback to the local ISP.</li>
+</ol>
+<p><em>(For the complete implementation guide, see my follow-up post: <a href="/2026/01/19/day4/">Architecting a Resilient Home Network</a>)</em></p>
 
                 
               </div>
@@ -328,7 +349,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" class="category-chain-item">网络安全</a>
+  <a href="/categories/Network-Engineering/" class="category-chain-item">Network Engineering</a>
   
   
 
@@ -345,11 +366,11 @@
       
         <a href="/tags/DNS/" class="print-no-link">#DNS</a>
       
-        <a href="/tags/%E7%BF%BB%E5%A2%99/" class="print-no-link">#翻墙</a>
+        <a href="/tags/Network-Security/" class="print-no-link">#Network Security</a>
       
         <a href="/tags/OpenClash/" class="print-no-link">#OpenClash</a>
       
-        <a href="/tags/AdguardHome/" class="print-no-link">#AdguardHome</a>
+        <a href="/tags/AdGuardHome/" class="print-no-link">#AdGuardHome</a>
       
     </div>
   
@@ -361,7 +382,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Openwrt上通过AdguardHome和OpenClash部署私人DNS</div>
+      <div>Understanding DNS Leaks and Risks in Split-Tunneling Networks</div>
       <div>https://androwsblog.dpdns.org/2025/08/16/hello-world/</div>
     </div>
     <div class="license-meta">
