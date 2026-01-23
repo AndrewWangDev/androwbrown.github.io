@@ -1,0 +1,56 @@
+# =========================================================
+# General Policy: Allow all international search engines
+# (Google, Bing, Yahoo, DuckDuckGo, etc.)
+# =========================================================
+User-agent: *
+Allow: /
+
+# =========================================================
+# Block Domestic (Chinese) Search Engines
+# =========================================================
+
+# Baidu
+User-agent: Baiduspider
+Disallow: /
+
+# Sogou
+User-agent: Sogou web spider
+User-agent: Sogou inst spider
+Disallow: /
+
+# 360 Search (Qihoo)
+User-agent: 360Spider
+Disallow: /
+
+# Shenma (Yisou / UC Browser)
+User-agent: YisouSpider
+Disallow: /
+
+# ByteDance (Toutiao / Douyin / TikTok)
+User-agent: Bytespider
+Disallow: /
+
+# =========================================================
+# AI & Data Scrapers Restrictions (Keep AI protection)
+# =========================================================
+
+# Block Google AI training (but allow Search)
+User-agent: Google-Extended
+Disallow: /
+
+# Block OpenAI (ChatGPT)
+User-agent: GPTBot
+Disallow: /
+
+# Block Anthropic (Claude)
+User-agent: ClaudeBot
+Disallow: /
+
+# Block Common Crawl (General AI Dataset)
+User-agent: CCBot
+Disallow: /
+
+# =========================================================
+# Sitemap Location
+# =========================================================
+Sitemap: https://andrewwangdev.com/sitemap.xml
