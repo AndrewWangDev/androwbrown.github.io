@@ -1,48 +1,232 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-      http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator https://www.eptimize.app -->
-  <url>
-    <loc>https://androwsblog.dpdns.org/about/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/tags/DNS/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/archives/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/links/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/tags/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/categories/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/2025/08/16/hello-world/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://androwsblog.dpdns.org/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <priority>0.8</priority>
-  </url>
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://andrewwangdev.com/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/archives/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/about/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/dynamic</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/2026/01/23/day5/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Tools/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Tools/Open-Source/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Windows/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Tauri/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/System-Monitor/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Toolkit/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/2026/01/18/day4/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Infrastructure/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Linux/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Network-Engineering/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/OpenWrt/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Home-Lab/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Cloudflare-Zero-Trust/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/2026/01/04/day3/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Server-Administration/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/VPS/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Security/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Performance/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/BBR/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/2025/10/27/day2/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Dev-Tools/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Git/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/GitHub/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Open-Source/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Workflow/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/2025/08/15/day1/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Frontend-Development/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/React/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/JSX/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/JavaScript/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Lexical-Scoping/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Event-Delegation/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/2025/08/15/hello-world/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/categories/Network-Engineering/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/DNS/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/Network-Security/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://andrewwangdev.com/tags/OpenClash/</loc>
+  <lastmod>2026-01-23T15:43:57+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
 </urlset>
