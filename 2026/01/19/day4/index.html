@@ -19,25 +19,28 @@
   <meta name="author" content="Andrew Wang Dev">
   <meta name="keywords" content="Andrew Wang Dev, Software Engineer, C++, Python, Linux, OpenWrt, Cloudflare, DevOps, Portfolio, SWJTU">
   
-    <meta name="description" content="A lightweight, modern floating system monitor for Windows built with Tauri, React, and Rust.">
+    <meta name="description" content="A technical deep-dive into configuring a split-gateway network topology to bypass high latency, eliminate DNS pollution, and secure remote management using OpenWrt and Zero Trust tunnels.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Toolkit — Windows Floating System Monitor">
-<meta property="og:url" content="https://andrewwangdev.com/2026/01/23/day5/index.html">
+<meta property="og:title" content="Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust">
+<meta property="og:url" content="https://andrewwangdev.com/2026/01/19/day4/index.html">
 <meta property="og:site_name" content="Andrew Wang Dev">
-<meta property="og:description" content="A lightweight, modern floating system monitor for Windows built with Tauri, React, and Rust.">
+<meta property="og:description" content="A technical deep-dive into configuring a split-gateway network topology to bypass high latency, eliminate DNS pollution, and secure remote management using OpenWrt and Zero Trust tunnels.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-01-23T01:00:00.000Z">
-<meta property="article:modified_time" content="2026-01-23T23:18:44.354Z">
+<meta property="og:image" content="https://andrewwangdev.com/img/res.png">
+<meta property="article:published_time" content="2026-01-18T16:00:13.000Z">
+<meta property="article:modified_time" content="2026-01-18T16:41:18.366Z">
 <meta property="article:author" content="Andrew Wang Dev">
-<meta property="article:tag" content="Windows">
-<meta property="article:tag" content="Tauri">
-<meta property="article:tag" content="System Monitor">
-<meta property="article:tag" content="Toolkit">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Network Engineering">
+<meta property="article:tag" content="OpenWrt">
+<meta property="article:tag" content="Home Lab">
+<meta property="article:tag" content="Cloudflare Zero Trust">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://andrewwangdev.com/img/res.png">
   
   
   
-  <title>Toolkit — Windows Floating System Monitor - Andrew Wang Dev</title>
+  <title>Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust - Andrew Wang Dev</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Toolkit — Windows Floating System Monitor"></span>
+            <span id="subtitle" data-typed-text="Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust"></span>
           
         </div>
 
@@ -226,8 +229,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-01-23 09:00" pubdate>
-          January 23, 2026 am
+        <time datetime="2026-01-19 00:00" pubdate>
+          January 19, 2026 am
         </time>
       </span>
     
@@ -238,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          164 words
+          354 words
         
       </span>
     
@@ -249,7 +252,7 @@
         
         
         
-          2 mins
+          3 mins
         
       </span>
     
@@ -286,57 +289,89 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Toolkit — Windows Floating System Monitor</h1>
+            <h1 id="seo-header">Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Toolkit is a lightweight, high-quality system status monitor for Windows. Built with Tauri (Rust) and a React + TypeScript frontend, Toolkit provides a borderless, always-on-top floating widget that displays essential system metrics — CPU, memory, network throughput, and battery — with a modern, Material-inspired aesthetic.</p>
-<p>Repository: <a target="_blank" rel="noopener" href="https://github.com/AndrewWangDev/monitor_tool">https://github.com/AndrewWangDev/monitor_tool</a></p>
-<h2 id="Key-Features"><a href="#Key-Features" class="headerlink" title="Key Features"></a>Key Features</h2><ul>
-<li>Real-time system metrics: CPU usage percentage, memory usage (percentage and absolute), upload&#x2F;download network throughput, and battery level&#x2F;charging state.</li>
-<li>Floating, draggable widget: borderless, always-on-top window that can be positioned anywhere on the screen and dragged via an explicit drag region.</li>
-<li>Lightweight runtime: Tauri + Rust backend keeps resource usage low compared with typical Electron-based tools.</li>
-<li>Modern UI: Material-like tokens and dynamic transparency for a clean, unobtrusive look.</li>
-<li>User-configurable display: selectively show&#x2F;hide CPU, RAM, Network, or Battery panels via an in-widget settings overlay.</li>
-</ul>
-<h2 id="How-It-Works-Implementation-Notes"><a href="#How-It-Works-Implementation-Notes" class="headerlink" title="How It Works (Implementation Notes)"></a>How It Works (Implementation Notes)</h2><ul>
-<li>Frontend: React (v19) + TypeScript, bundled with Vite and styled with TailwindCSS. The UI exposes a drag handle, a compact settings overlay, and metric cards that update every second.</li>
-<li>Backend: Tauri (Rust) exposes a <code>get_metrics</code> command that returns a JSON payload containing <code>cpu_usage</code>, <code>total_memory</code>, <code>used_memory</code>, <code>total_rx</code>, and <code>total_tx</code>. The frontend calls this command once per second to update the display and compute network speeds as byte differences between samples.</li>
-<li>System data: Rust uses crates such as <code>sysinfo</code> to read low-level system metrics on Windows.</li>
-<li>Battery monitoring: the frontend queries the browser <code>navigator.getBattery()</code> when available to show battery level and charging state.</li>
-</ul>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>Prerequisites:</p>
+                <h2 id="1-The-Challenge-Network-Rigidity-and-DNS-Pollution"><a href="#1-The-Challenge-Network-Rigidity-and-DNS-Pollution" class="headerlink" title="1. The Challenge: Network Rigidity and DNS Pollution"></a>1. The Challenge: Network Rigidity and DNS Pollution</h2><p>In restrictive network environments, standard ISP-provided hardware often becomes a bottleneck for power users and developers. The primary pain points I encountered were:</p>
 <ul>
-<li>Node.js (v16+)</li>
-<li>Rust toolchain (stable)</li>
-<li>WebView2 (usually preinstalled on Windows 10&#x2F;11)</li>
+<li><strong>DNS Pollution &amp; Hijacking:</strong> Unreliable domain resolution leads to connection timeouts. While tools like <a target="_blank" rel="noopener" href="https://browserleaks.com/dns">BrowserLeaks</a> can estimate leaks, they are often insufficient in sophisticated environments. If an ISP utilizes <strong>DNAT (Destination NAT)</strong> to transparently hijack UDP 53 traffic, standard leak tests may return false negatives because the interception happens silently without cryptographic verification.</li>
+<li><strong>Lack of Granularity:</strong> Client-side ad-blocking (installing apps on every phone and laptop) is unscalable. I needed a network-level “sinkhole” to filter traffic for all devices—including IoT hardware that cannot run ad-blocking software.</li>
+<li><strong>Security Risks:</strong> The need to access home resources remotely without exposing dangerous ports to the public internet.</li>
 </ul>
-<p>Clone and run in development mode:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/AndrewWangDev/monitor_tool.git<br><span class="hljs-built_in">cd</span> monitor_tool<br>npm install<br>npm run tauri dev<br></code></pre></td></tr></table></figure>
-
-<p>Build a production executable:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm run tauri build<br></code></pre></td></tr></table></figure>
-
-<p>The NSIS installer or <code>.exe</code> output can be found under <code>src-tauri/target/release/bundle/nsis/</code> after a successful build.</p>
-<h2 id="Files-and-Dependencies-of-Note"><a href="#Files-and-Dependencies-of-Note" class="headerlink" title="Files and Dependencies of Note"></a>Files and Dependencies of Note</h2><ul>
-<li><code>package.json</code>: React + Vite + Tauri frontend; key packages include <code>@tauri-apps/api</code>, <code>@tauri-apps/cli</code>, <code>react</code>, <code>vite</code>, and <code>tailwind-merge</code>.</li>
-<li><code>src/App.tsx</code>: Main UI component — uses <code>@tauri-apps/api/window</code> for dragging, invokes <code>get_metrics</code> for system data, and computes network speed deltas client-side.</li>
-<li><code>src-tauri/Cargo.toml</code>: Rust dependencies include <code>tauri</code>, <code>tauri-plugin-opener</code>, <code>serde</code>, <code>serde_json</code>, and <code>sysinfo</code> for system metrics.</li>
+<p>As a Computer Science student, I needed a solution that offered low-latency secure tunneling, comprehensive ad-blocking, and secure remote management.</p>
+<h2 id="2-The-Solution-A-Split-Gateway-Topology"><a href="#2-The-Solution-A-Split-Gateway-Topology" class="headerlink" title="2. The Solution: A Split-Gateway Topology"></a>2. The Solution: A Split-Gateway Topology</h2><p>To solve this, I designed a network architecture separating <strong>Data Link&#x2F;Physical layer responsibilities</strong> from <strong>Network&#x2F;Application layer processing</strong>.</p>
+<ul>
+<li><strong>Primary Router (Infrastructure):</strong> Handles Wi-Fi broadcasting and raw PPPoE negotiation (standard consumer router duties).</li>
+<li><strong>Secondary Gateway (Intelligence):</strong> An OpenWrt-based device acting as a “Bypass Gateway” (Side Router) to handle DNS resolution, traffic shaping, and ad-blocking.</li>
 </ul>
-<h2 id="Use-Cases"><a href="#Use-Cases" class="headerlink" title="Use Cases"></a>Use Cases</h2><ul>
-<li>Developers, designers, and power users who need a compact overview of system performance without desktop clutter.</li>
-<li>Users who prefer aesthetic, always-on-top widgets with minimal resource overhead.</li>
-</ul>
-<h2 id="Contributing"><a href="#Contributing" class="headerlink" title="Contributing"></a>Contributing</h2><p>Contributions are welcome. Recommended workflow:</p>
-<ol>
-<li>Fork the repository and create a feature branch.</li>
-<li>Keep <code>main</code> synchronized with upstream before starting work.</li>
-<li>Implement changes in a topic branch and open a pull request with a clear description.</li>
+<h3 id="Hardware-Prerequisites"><a href="#Hardware-Prerequisites" class="headerlink" title="Hardware Prerequisites"></a>Hardware Prerequisites</h3><ol>
+<li><strong>Primary Router:</strong> Any high-performance consumer router capable of AP mode.</li>
+<li><strong>Secondary Gateway:</strong> A device (e.g., Raspberry Pi, NanoPi, or x86 Mini PC) capable of running <strong>OpenWrt</strong>.</li>
 </ol>
-<p>See the repository for contribution guidelines, issue tracking, and code of conduct.</p>
-<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p>This project is released under the MIT License. See the <code>LICENSE</code> file in the repository for details.</p>
-<hr>
+<h2 id="3-Implementation"><a href="#3-Implementation" class="headerlink" title="3. Implementation"></a>3. Implementation</h2><h3 id="Phase-0-Firmware-Preparation-Flashing-OpenWrt"><a href="#Phase-0-Firmware-Preparation-Flashing-OpenWrt" class="headerlink" title="Phase 0: Firmware Preparation (Flashing OpenWrt)"></a>Phase 0: Firmware Preparation (Flashing OpenWrt)</h3><p><em>Note: The flashing process varies significantly by hardware manufacturer. The following is a generalized workflow.</em></p>
+<p>Before configuring the network, the secondary gateway must be flashed with OpenWrt to gain root access and package management capabilities.</p>
+<ol>
+<li><strong>Select Hardware:</strong> Consult the <a target="_blank" rel="noopener" href="https://openwrt.org/toh/start">OpenWrt Table of Hardware</a> to ensure your device is supported.</li>
+<li><strong>Unlock Bootloader:</strong> For many consumer routers (e.g., Xiaomi, Redmi), you must first exploit the stock firmware to enable SSH and unlock the bootloader.</li>
+<li><strong>Flash Recovery Environment:</strong> It is best practice to flash a custom bootloader (like <strong>Breed</strong> or <strong>U-Boot</strong>) to prevent “bricking” the device.</li>
+<li><strong>Install OpenWrt:</strong><ul>
+<li>Download the <code>squashfs-sysupgrade.bin</code> specific to your target architecture (x86_64, ARM, MIPS).</li>
+<li>Upload the firmware via the recovery web interface or SSH.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Example SSH flash command (device specific)</span><br>scp openwrt-firmware.bin root@192.168.1.1:/tmp/<br>ssh root@192.168.1.1 <span class="hljs-string">&quot;sysupgrade -v /tmp/openwrt-firmware.bin&quot;</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Phase-1-Network-Topology-Configuration"><a href="#Phase-1-Network-Topology-Configuration" class="headerlink" title="Phase 1: Network Topology Configuration"></a>Phase 1: Network Topology Configuration</h3><p>I configured the primary router to handle the PPPoE connection to the ISP. Crucially, I <strong>disabled DHCP</strong> on the primary router to delegate address management to the OpenWrt gateway.</p>
+<ul>
+<li><strong>Primary Router IP:</strong> <code>10.0.0.1</code> (Static)</li>
+<li><strong>Mode:</strong> Wireless Access Point (AP)</li>
+</ul>
+<p>Next, I configured the OpenWrt gateway:</p>
+<ol>
+<li>Connected via Ethernet to the Primary Router (LAN to LAN).</li>
+<li>Assigned Static IP: <code>10.0.0.5</code>.</li>
+<li>Configured as a <strong>Bypass Gateway</strong> (pointing its IPv4 Gateway to <code>10.0.0.1</code>).</li>
+</ol>
+<h3 id="Phase-2-Environment-Dependencies-OpenClash"><a href="#Phase-2-Environment-Dependencies-OpenClash" class="headerlink" title="Phase 2: Environment Dependencies &amp; OpenClash"></a>Phase 2: Environment Dependencies &amp; OpenClash</h3><p>Accessing the OpenWrt gateway via SSH, I updated the package lists and installed the necessary dependencies for traffic routing and kernel modules.</p>
+<p><em>Technical Note: OpenWrt utilizes <code>opkg</code> for package management.</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Update package lists</span><br>opkg update<br><br><span class="hljs-comment"># Install core dependencies and networking tools</span><br>opkg install bash iptables dnsmasq-full curl ca-bundle ipset ip-full \<br>iptables-mod-tproxy iptables-mod-extra ruby ruby-yaml kmod-tun \<br>kmod-inet-diag unzip luci-compat luci luci-base<br><br><span class="hljs-comment"># Install OpenClash (Secure Tunneling Client)</span><br><span class="hljs-comment"># Assuming the IPK is transferred to /tmp via SCP</span><br>opkg install /tmp/openclash.ipk<br></code></pre></td></tr></table></figure>
+
+<h3 id="Phase-3-AdGuard-Home-Integration"><a href="#Phase-3-AdGuard-Home-Integration" class="headerlink" title="Phase 3: AdGuard Home Integration"></a>Phase 3: AdGuard Home Integration</h3><p>To implement network-wide ad-blocking, I integrated AdGuard Home. This acts as a DNS sinkhole, intercepting DNS requests and blocking known tracking domains.</p>
+<p><em>(Note: Ensure you download the binary matching your CPU architecture, e.g., ARM64 vs AMD64).</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /tmp<br><span class="hljs-comment"># Example for ARM64 architecture</span><br>wget https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.43/AdGuardHome_linux_arm64.tar.gz<br>tar -zxvf AdGuardHome_linux_arm64.tar.gz<br><span class="hljs-built_in">cd</span> AdGuardHome<br>./AdGuardHome -s install<br></code></pre></td></tr></table></figure>
+
+<h3 id="Phase-4-Firewall-Port-Management"><a href="#Phase-4-Firewall-Port-Management" class="headerlink" title="Phase 4: Firewall &amp; Port Management"></a>Phase 4: Firewall &amp; Port Management</h3><p>I configured the OpenWrt firewall (<code>iptables</code> wrapper) to allow traffic on the management ports for both services (Port <code>3000</code> for AdGuard Home and <code>9090</code> for OpenClash).</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># /etc/config/firewall configuration via UCI</span><br>uci add firewall rule<br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].name=<span class="hljs-string">&#x27;Allow-AdGuard-WebUI&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].src=<span class="hljs-string">&#x27;lan&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].proto=<span class="hljs-string">&#x27;tcp&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].dest_port=<span class="hljs-string">&#x27;3000&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].target=<span class="hljs-string">&#x27;ACCEPT&#x27;</span><br>uci commit firewall<br>/etc/init.d/firewall restart<br></code></pre></td></tr></table></figure>
+
+<h3 id="Phase-5-The-DNS-Pipeline"><a href="#Phase-5-The-DNS-Pipeline" class="headerlink" title="Phase 5: The DNS Pipeline"></a>Phase 5: The DNS Pipeline</h3><p>This is the most critical configuration to ensure no DNS leaks occur and traffic is routed correctly.</p>
+<ol>
+<li><strong>OpenClash:</strong> Disabled built-in DNS sniffing to prevent conflicts.</li>
+<li><strong>AdGuard Home:</strong><ul>
+<li><strong>Listeners:</strong> <code>::1:53</code> and <code>0.0.0.0:53</code>.</li>
+<li><strong>Upstream DNS:</strong> Points to the OpenClash local DNS port (e.g., <code>127.0.0.1:7874</code>).</li>
+<li><strong>DHCP Server:</strong> Enabled on AdGuard Home.<ul>
+<li><strong>Gateway set to:</strong> <code>10.0.0.5</code> (The OpenWrt device).</li>
+<li><strong>Subnet:</strong> <code>10.0.0.0/8</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>The Traffic Flow:</strong><br><code>Client Device</code> -&gt; <code>AdGuard Home (Filter Ads)</code> -&gt; <code>OpenClash (Route Traffic/Tunnel)</code> -&gt; <code>Internet</code></p>
+<h3 id="Phase-6-Secure-Remote-Access-Cloudflare-Zero-Trust"><a href="#Phase-6-Secure-Remote-Access-Cloudflare-Zero-Trust" class="headerlink" title="Phase 6: Secure Remote Access (Cloudflare Zero Trust)"></a>Phase 6: Secure Remote Access (Cloudflare Zero Trust)</h3><p>To manage the home network from outside without exposing ports (and risking security breaches), I utilized <strong>Cloudflared</strong>.</p>
+<ol>
+<li>Installed <code>cloudflared</code> on OpenWrt.</li>
+<li>Created a Tunnel via the Cloudflare Zero Trust Dashboard.</li>
+<li>Mapped <code>10.0.0.5:80</code> (LuCI Interface) to a custom subdomain (e.g., <code>admin.mydomain.com</code>).</li>
+<li><strong>Security Policy:</strong> Enabled Zero Trust authentication (requiring email OTP) to access the subdomain.</li>
+</ol>
+<h2 id="4-Impact-and-Results"><a href="#4-Impact-and-Results" class="headerlink" title="4. Impact and Results"></a>4. Impact and Results</h2><p>By shifting from a standard ISP setup to this custom “Split-Gateway” architecture, I achieved:</p>
+<ul>
+<li><strong>Enhanced Privacy:</strong> Encrypted DNS resolution prevents ISP snooping and mitigates DNAT hijacking.</li>
+<li><strong>Network Efficiency:</strong> Intrusive ads are blocked at the DNS level before reaching client devices, saving bandwidth.</li>
+<li><strong>Zero-Trust Security:</strong> Administrative access is entirely hidden behind Cloudflare’s edge network, eliminating the attack surface of open ports.<br><img src="/img/res.png" srcset="/img/loading.gif" lazyload alt="DNS Leak Test Result"></li>
+</ul>
 
                 
               </div>
@@ -355,15 +390,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Tools/" class="category-chain-item">Tools</a>
+  <a href="/categories/Infrastructure/" class="category-chain-item">Infrastructure</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/Tools/Open-Source/" class="category-chain-item">Open Source</a>
-  
-  
-
   
 
       </span>
@@ -377,13 +405,15 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Windows/" class="print-no-link">#Windows</a>
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
       
-        <a href="/tags/Tauri/" class="print-no-link">#Tauri</a>
+        <a href="/tags/Network-Engineering/" class="print-no-link">#Network Engineering</a>
       
-        <a href="/tags/System-Monitor/" class="print-no-link">#System Monitor</a>
+        <a href="/tags/OpenWrt/" class="print-no-link">#OpenWrt</a>
       
-        <a href="/tags/Toolkit/" class="print-no-link">#Toolkit</a>
+        <a href="/tags/Home-Lab/" class="print-no-link">#Home Lab</a>
+      
+        <a href="/tags/Cloudflare-Zero-Trust/" class="print-no-link">#Cloudflare Zero Trust</a>
       
     </div>
   
@@ -395,8 +425,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Toolkit — Windows Floating System Monitor</div>
-      <div>https://andrewwangdev.com/2026/01/23/day5/</div>
+      <div>Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust</div>
+      <div>https://andrewwangdev.com/2026/01/19/day4/</div>
     </div>
     <div class="license-meta">
       
@@ -408,7 +438,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>January 23, 2026</div>
+          <div>January 19, 2026</div>
         </div>
       
       
@@ -440,9 +470,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/26/day6/" title="Compose Call Guard: An Android Call Blocking App with Regex">
+                      <a href="/2026/01/23/day5/" title="Toolkit — Windows Floating System Monitor">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Compose Call Guard: An Android Call Blocking App with Regex</span>
+                        <span class="hidden-mobile">Toolkit — Windows Floating System Monitor</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -450,8 +480,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/19/day4/" title="Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust">
-                        <span class="hidden-mobile">Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust</span>
+                      <a href="/2026/01/04/day3/" title="Essential VPS Setup: Securing SSH and Enabling BBR Optimization">
+                        <span class="hidden-mobile">Essential VPS Setup: Securing SSH and Enabling BBR Optimization</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
