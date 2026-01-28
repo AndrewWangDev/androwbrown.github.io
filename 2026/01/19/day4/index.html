@@ -26,9 +26,11 @@
 <meta property="og:site_name" content="Andrew Wang Dev">
 <meta property="og:description" content="A technical deep-dive into configuring a split-gateway network topology to bypass high latency, eliminate DNS pollution, and secure remote management using OpenWrt and Zero Trust tunnels.">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://andrewwangdev.com/img/plan.png">
 <meta property="og:image" content="https://andrewwangdev.com/img/res.png">
+<meta property="og:image" content="https://andrewwangdev.com/img/Adblock.png">
 <meta property="article:published_time" content="2026-01-18T16:00:13.000Z">
-<meta property="article:modified_time" content="2026-01-18T16:41:18.366Z">
+<meta property="article:modified_time" content="2026-01-28T14:42:38.287Z">
 <meta property="article:author" content="Andrew Wang Dev">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Network Engineering">
@@ -36,7 +38,7 @@
 <meta property="article:tag" content="Home Lab">
 <meta property="article:tag" content="Cloudflare Zero Trust">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://andrewwangdev.com/img/res.png">
+<meta name="twitter:image" content="https://andrewwangdev.com/img/plan.png">
   
   
   
@@ -302,7 +304,8 @@
 <li><strong>Security Risks:</strong> The need to access home resources remotely without exposing dangerous ports to the public internet.</li>
 </ul>
 <p>As a Computer Science student, I needed a solution that offered low-latency secure tunneling, comprehensive ad-blocking, and secure remote management.</p>
-<h2 id="2-The-Solution-A-Split-Gateway-Topology"><a href="#2-The-Solution-A-Split-Gateway-Topology" class="headerlink" title="2. The Solution: A Split-Gateway Topology"></a>2. The Solution: A Split-Gateway Topology</h2><p>To solve this, I designed a network architecture separating <strong>Data Link&#x2F;Physical layer responsibilities</strong> from <strong>Network&#x2F;Application layer processing</strong>.</p>
+<h2 id="2-The-Solution-A-Split-Gateway-Topology"><a href="#2-The-Solution-A-Split-Gateway-Topology" class="headerlink" title="2. The Solution: A Split-Gateway Topology"></a>2. The Solution: A Split-Gateway Topology</h2><p><img src="/img/plan.png" srcset="/img/loading.gif" lazyload alt="My Network Architecture"></p>
+<p>To solve this, I designed a network architecture separating <strong>Data Link&#x2F;Physical layer responsibilities</strong> from <strong>Network&#x2F;Application layer processing</strong>.</p>
 <ul>
 <li><strong>Primary Router (Infrastructure):</strong> Handles Wi-Fi broadcasting and raw PPPoE negotiation (standard consumer router duties).</li>
 <li><strong>Secondary Gateway (Intelligence):</strong> An OpenWrt-based device acting as a “Bypass Gateway” (Side Router) to handle DNS resolution, traffic shaping, and ad-blocking.</li>
@@ -371,7 +374,7 @@
 <ul>
 <li><strong>Enhanced Privacy:</strong> Encrypted DNS resolution prevents ISP snooping and mitigates DNAT hijacking.</li>
 <li><strong>Network Efficiency:</strong> Intrusive ads are blocked at the DNS level before reaching client devices, saving bandwidth.</li>
-<li><strong>Zero-Trust Security:</strong> Administrative access is entirely hidden behind Cloudflare’s edge network, eliminating the attack surface of open ports.<br><img src="/img/res.png" srcset="/img/loading.gif" lazyload alt="DNS Leak Test Result"></li>
+<li><strong>Zero-Trust Security:</strong> Administrative access is entirely hidden behind Cloudflare’s edge network, eliminating the attack surface of open ports.<br><img src="/img/res.png" srcset="/img/loading.gif" lazyload alt="DNS Leak Test Result"><br><img src="/img/Adblock.png" srcset="/img/loading.gif" lazyload alt="Adblock Result"></li>
 </ul>
 
                 
