@@ -19,28 +19,31 @@
   <meta name="author" content="Andrew Wang Dev">
   <meta name="keywords" content="Andrew Wang Dev, Software Engineer, C++, Python, Linux, OpenWrt, Cloudflare, DevOps, Portfolio, SWJTU">
   
-    <meta name="description" content="Cloudflare IP Selector: uses smart sampling to minimize latency. Designed for Windows 11 with a modern Material You aesthetic.">
+    <meta name="description" content="Introducing ECH Auto-Patcher, a server-side solution to automate Cloudflare ECH key rotation for V2Ray clients, ensuring zero-latency privacy without manual configuration.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Building a Modern Cloudflare IP Speedtester for Windows">
-<meta property="og:url" content="https://andrewwangdev.com/2026/01/28/day7/index.html">
+<meta property="og:title" content="Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching">
+<meta property="og:url" content="https://andrewwangdev.com/2026/01/29/day8/index.html">
 <meta property="og:site_name" content="Andrew Wang Dev">
-<meta property="og:description" content="Cloudflare IP Selector: uses smart sampling to minimize latency. Designed for Windows 11 with a modern Material You aesthetic.">
+<meta property="og:description" content="Introducing ECH Auto-Patcher, a server-side solution to automate Cloudflare ECH key rotation for V2Ray clients, ensuring zero-latency privacy without manual configuration.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://andrewwangdev.com/img/1.png">
-<meta property="og:image" content="https://andrewwangdev.com/img/2.png">
-<meta property="article:published_time" content="2026-01-28T14:30:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T14:38:34.013Z">
+<meta property="og:image" content="https://andrewwangdev.com/img/ech.png">
+<meta property="og:image" content="https://andrewwangdev.com/img/arch.png">
+<meta property="article:published_time" content="2026-01-29T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-29T08:53:20.171Z">
 <meta property="article:author" content="Andrew Wang Dev">
+<meta property="article:tag" content="Privacy">
+<meta property="article:tag" content="Network Engineering">
+<meta property="article:tag" content="ECH">
 <meta property="article:tag" content="Cloudflare">
+<meta property="article:tag" content="V2Ray">
+<meta property="article:tag" content="Exclave">
 <meta property="article:tag" content="Python">
-<meta property="article:tag" content="Networking">
-<meta property="article:tag" content="CustomTkinter">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://andrewwangdev.com/img/1.png">
+<meta name="twitter:image" content="https://andrewwangdev.com/img/ech.png">
   
   
   
-  <title>Building a Modern Cloudflare IP Speedtester for Windows - Andrew Wang Dev</title>
+  <title>Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching - Andrew Wang Dev</title>
 
   <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -219,7 +222,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Building a Modern Cloudflare IP Speedtester for Windows"></span>
+            <span id="subtitle" data-typed-text="Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching"></span>
           
         </div>
 
@@ -230,8 +233,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-01-28 22:30" pubdate>
-          January 28, 2026 pm
+        <time datetime="2026-01-29 09:00" pubdate>
+          January 29, 2026 am
         </time>
       </span>
     
@@ -242,7 +245,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          76 words
+          148 words
         
       </span>
     
@@ -253,7 +256,7 @@
         
         
         
-          1 mins
+          2 mins
         
       </span>
     
@@ -290,41 +293,48 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Building a Modern Cloudflare IP Speedtester for Windows</h1>
+            <h1 id="seo-header">Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Finding the fastest Cloudflare IP for your network can often feel like searching for a needle in a haystack. While there are command-line scripts out there, I wanted to build something that not only works fast but also looks native on Windows 11.</p>
-<p><strong>CF-IP-Speedtest (Material Edition)</strong>.</p>
-<h2 id="The-Problem"><a href="#The-Problem" class="headerlink" title="The Problem"></a>The Problem</h2><p>Cloudflare has massive IP ranges. Scanning all of them is impossible for a quick desktop utility. Most tools either:</p>
+                <p>In the modern landscape of internet privacy and censorship circumvention, <strong>Encrypted Client Hello (ECH)</strong> represents the “final frontier” of transport security. While TLS 1.3 encrypts the data payload, the <strong>Server Name Indication (SNI)</strong>—the destination hostname—has traditionally remained in plaintext during the handshake. This vulnerability allows firewalls (DPI systems) to inspect and block connections based solely on the target domain.</p>
+<p>ECH solves this by encrypting the Client Hello message, effectively blinding observers to the destination.</p>
+<p><img src="/img/ech.png" srcset="/img/loading.gif" lazyload alt="Encrypted Client Hello"></p>
+<p>However, operationalizing ECH with robust infrastructure providers like <strong>Cloudflare</strong> presents a unique engineering challenge for mobile clients, specifically those based on the <strong>V2Ray&#x2F;Xray</strong> core, such as <strong>Exclave</strong>.</p>
+<p>Today, I am releasing <strong>ECH Auto-Patcher</strong>, an open-source tool designed to resolve these compatibility issues.</p>
+<h3 id="The-Conflict-Security-Rotation-vs-Client-Rigidity"><a href="#The-Conflict-Security-Rotation-vs-Client-Rigidity" class="headerlink" title="The Conflict: Security Rotation vs. Client Rigidity"></a>The Conflict: Security Rotation vs. Client Rigidity</h3><p>To maintain forward secrecy and prevent replay attacks, Cloudflare rotates its <strong>ECH Configs (Public Keys)</strong> frequently—often hourly. </p>
+<p>For standard browsers (Chrome&#x2F;Firefox), this rotation is seamless; they utilize DNS-over-HTTPS (DoH) to fetch the latest keys just-in-time. However, for specialized proxy clients like <strong>Exclave</strong>, particularly when configured with advanced transport protocols (mTLS, Multiplexing, XUDP), the situation is different:</p>
 <ol>
-<li>Scan sequentially (too slow).</li>
-<li>Use ICMP Pings (often blocked or prioritized differently than actual traffic).</li>
-<li>Have clunky, outdated generic UIs.</li>
+<li><strong>Static Configuration</strong>: These clients often rely on rigid binary configurations (Protobuf) to support complex features. They lack the native logic to “hot-swap” ECH keys derived from DNS without breaking other transport settings.</li>
+<li><strong>Manual Toil</strong>: Users are forced to manually look up the new DNS record and update their client configuration every time the key rotates. If the key expires, the connection drops.</li>
 </ol>
-<h2 id="The-Solution"><a href="#The-Solution" class="headerlink" title="The Solution"></a>The Solution</h2><p>I decided to build a standalone Windows application using <strong>Python</strong> and <strong>CustomTkinter</strong> to solve this.</p>
-<h3 id="Key-Features"><a href="#Key-Features" class="headerlink" title="Key Features"></a>Key Features</h3><ul>
-<li><strong>Material Design 3</strong>: Fits right into the modern Windows 11 aesthetic.</li>
-<li><strong>Smart Sampling</strong>: Instead of brute-forcing, it randomly samples IPs from the vast CIDR ranges.</li>
-<li><strong>Real TCP Testing</strong>: It performs actual TCP handshakes on port 443. This mimics real web traffic latency much better than a simple ping.</li>
-<li><strong>Concurrent Scanning</strong>: Uses multi-threading to check 50+ IPs simultaneously.</li>
+<h3 id="Why-Client-Side-DoH-is-Suboptimal"><a href="#Why-Client-Side-DoH-is-Suboptimal" class="headerlink" title="Why Client-Side DoH is Suboptimal"></a>Why Client-Side DoH is Suboptimal</h3><p>The mainstream workaround involves forcing the client to perform a DoH lookup before every connection. While functional, this introduces significant <strong>latency overhead</strong>:</p>
+<ul>
+<li><strong>Standard Connection</strong>: TCP Handshake (1 RTT) + TLS Handshake (1 RTT) &#x3D; <strong>2 RTT</strong>.</li>
+<li><strong>With Client-Side DoH</strong>: DoH Connection (2 RTT) + DNS Query (1 RTT) + Target Connection (2 RTT) &#x3D; <strong>5+ RTTs</strong>.</li>
 </ul>
-<h2 id="Under-the-Hood"><a href="#Under-the-Hood" class="headerlink" title="Under the Hood"></a>Under the Hood</h2><p>The core logic revolves around a producer-consumer pattern.</p>
-<ol>
-<li><strong>IP Generator</strong>: Parses <code>ip.txt</code> containing CIDR blocks and pushes random IPs into a queue.</li>
-<li><strong>Thread Pool</strong>: A pool of workers picks up IPs and attempts a TCP connect.</li>
-<li><strong>UI Controller</strong>: Updates the interface in real-time as results come in, maintaining a sorted “Top 5” list.</li>
+<p>On mobile networks, this “Cold Start” penalty can add 200ms-500ms to every request. Furthermore, public DoH endpoints are frequently blocked in restrictive network environments, adding another point of failure.</p>
+<h3 id="The-Solution-Server-Side-Binary-Patching"><a href="#The-Solution-Server-Side-Binary-Patching" class="headerlink" title="The Solution: Server-Side Binary Patching"></a>The Solution: Server-Side Binary Patching</h3><p><strong>ECH Auto-Patcher</strong> shifts the complexity from the resource-constrained client to the server (VPS). It functions as a lightweight middleware daemon.</p>
+<p><img src="/img/arch.png" srcset="/img/loading.gif" lazyload alt="System Architecture"></p>
+<h4 id="How-It-Works"><a href="#How-It-Works" class="headerlink" title="How It Works"></a>How It Works</h4><ol>
+<li><strong>Polling</strong>: The script periodically queries Cloudflare’s DNS to fetch the latest ECH configuration.</li>
+<li><strong>Binary Surgery</strong>: It utilizes a <strong>Fixed-Length Binary Replacement</strong> technique. <ul>
+<li><em>The Trick</em>: We pre-allocate a “placeholder” (consisting of 1000 ‘a’ characters) within the Exclave Protobuf backup file.</li>
+<li>The script locates this placeholder and injects the fresh ECH key into the binary stream, padding the remainder with spaces.</li>
+<li>This ensures the file structure and offsets remain identical, preserving delicate settings like <strong>mTLS certificates</strong> and <strong>Mux</strong> configurations without needing to decode&#x2F;re-encode the entire Protobuf structure.</li>
+</ul>
+</li>
+<li><strong>Serving</strong>: The patched, always-fresh configuration is served via a local subscription link protected by the proxy’s internal loopback interface.</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Simplified snippet of the testing logic</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_connect_latency</span>(<span class="hljs-params">ip, port=<span class="hljs-number">443</span>, timeout=<span class="hljs-number">0.5</span></span>):<br>    start_time = time.time()<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">with</span> socket.create_connection((ip, port), timeout=timeout):<br>            <span class="hljs-keyword">return</span> (time.time() - start_time) * <span class="hljs-number">1000</span><br>    <span class="hljs-keyword">except</span> OSError:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="UI-Showcase"><a href="#UI-Showcase" class="headerlink" title="UI Showcase"></a>UI Showcase</h2><p>I used <code>CustomTkinter</code> to achieve that sleek look without the overhead of Electron.</p>
-<p><img src="/img/1.png" srcset="/img/loading.gif" lazyload alt="Results 1"></p>
-<p><em>The clean, distraction-free interface.</em></p>
-<p><img src="/img/2.png" srcset="/img/loading.gif" lazyload alt="Results 2"></p>
-<p><em>Real-time sorting of the best IPs found.</em></p>
-<h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><p>You can grab the latest executable from the releases page or check out the source code on GitHub.</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/AndrewWangDev/cf_ip_selector">Download CF-Speedtest</a></p>
+<h3 id="The-Result"><a href="#The-Result" class="headerlink" title="The Result"></a>The Result</h3><p>By moving the update logic to the backend, we achieve:</p>
+<ul>
+<li><strong>Zero-Added Latency</strong>: The client receives a pre-validated static config. Connections establish instantly with standard TLS 1.3 performance.</li>
+<li><strong>High Availability</strong>: Key fetching happens on the VPS, bypassing local network restrictions or DoH blocks.</li>
+<li><strong>Privacy Hardening</strong>: Full ECH support is enabled without sacrificing mTLS or XUDP performance.</li>
+</ul>
+<p>The project is open-source and available on GitHub.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/AndrewWangDev/ECH_Auto_Patcher"><strong>View Project on GitHub: AndrewWangDev&#x2F;ECH_Auto_Patcher</strong></a></p>
 
                 
               </div>
@@ -343,8 +353,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Project-Introduction/" class="category-chain-item">Project Introduction</a>
+  <a href="/categories/Projects/" class="category-chain-item">Projects</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/Projects/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
   
 
       </span>
@@ -358,13 +375,19 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/Privacy/" class="print-no-link">#Privacy</a>
+      
+        <a href="/tags/Network-Engineering/" class="print-no-link">#Network Engineering</a>
+      
+        <a href="/tags/ECH/" class="print-no-link">#ECH</a>
+      
         <a href="/tags/Cloudflare/" class="print-no-link">#Cloudflare</a>
       
+        <a href="/tags/V2Ray/" class="print-no-link">#V2Ray</a>
+      
+        <a href="/tags/Exclave/" class="print-no-link">#Exclave</a>
+      
         <a href="/tags/Python/" class="print-no-link">#Python</a>
-      
-        <a href="/tags/Networking/" class="print-no-link">#Networking</a>
-      
-        <a href="/tags/CustomTkinter/" class="print-no-link">#CustomTkinter</a>
       
     </div>
   
@@ -376,8 +399,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Building a Modern Cloudflare IP Speedtester for Windows</div>
-      <div>https://andrewwangdev.com/2026/01/28/day7/</div>
+      <div>Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching</div>
+      <div>https://andrewwangdev.com/2026/01/29/day8/</div>
     </div>
     <div class="license-meta">
       
@@ -389,7 +412,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>January 28, 2026</div>
+          <div>January 29, 2026</div>
         </div>
       
       
@@ -421,18 +444,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/29/day8/" title="Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/26/day6/" title="Compose Call Guard: An Android Call Blocking App with Regex">
-                        <span class="hidden-mobile">Compose Call Guard: An Android Call Blocking App with Regex</span>
+                      <a href="/2026/01/28/day7/" title="Building a Modern Cloudflare IP Speedtester for Windows">
+                        <span class="hidden-mobile">Building a Modern Cloudflare IP Speedtester for Windows</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
