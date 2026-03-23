@@ -19,30 +19,28 @@
   <meta name="author" content="Andrew Wang Dev">
   <meta name="keywords" content="Andrew Wang Dev, Software Engineer, C++, Python, Linux, OpenWrt, Cloudflare, DevOps, Portfolio, SWJTU">
   
-    <meta name="description" content="A technical deep-dive into configuring a split-gateway network topology to bypass high latency, eliminate DNS pollution, and secure remote management using OpenWrt and Zero Trust tunnels.">
+    <meta name="description" content="A look into the development of SyncTree, a PySide6-based Git desktop client designed with strict state machine validation to prevent command errors.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust">
-<meta property="og:url" content="https://andrewwangdev.com/2026/01/19/day4/index.html">
+<meta property="og:title" content="Why I Built SyncTree - A State-Driven Git GUI">
+<meta property="og:url" content="https://andrewwangdev.com/2026/03/23/day9/index.html">
 <meta property="og:site_name" content="Andrew Wang Dev">
-<meta property="og:description" content="A technical deep-dive into configuring a split-gateway network topology to bypass high latency, eliminate DNS pollution, and secure remote management using OpenWrt and Zero Trust tunnels.">
+<meta property="og:description" content="A look into the development of SyncTree, a PySide6-based Git desktop client designed with strict state machine validation to prevent command errors.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://andrewwangdev.com/img/plan.png">
-<meta property="og:image" content="https://andrewwangdev.com/img/res.png">
-<meta property="og:image" content="https://andrewwangdev.com/img/Adblock.png">
-<meta property="article:published_time" content="2026-01-18T16:00:13.000Z">
-<meta property="article:modified_time" content="2026-01-28T14:42:38.287Z">
+<meta property="og:image" content="https://andrewwangdev.com/synctree.png">
+<meta property="article:published_time" content="2026-03-23T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-23T13:07:54.285Z">
 <meta property="article:author" content="Andrew Wang Dev">
-<meta property="article:tag" content="Network Engineering">
-<meta property="article:tag" content="OpenWrt">
-<meta property="article:tag" content="Home Lab">
-<meta property="article:tag" content="Cloudflare Zero Trust">
-<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Open Source">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="PySide6">
+<meta property="article:tag" content="GUI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://andrewwangdev.com/img/plan.png">
+<meta name="twitter:image" content="https://andrewwangdev.com/synctree.png">
   
   
   
-  <title>Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust - Andrew Wang Dev</title>
+  <title>Why I Built SyncTree - A State-Driven Git GUI - Andrew Wang Dev</title>
 
   <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -221,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust"></span>
+            <span id="subtitle" data-typed-text="Why I Built SyncTree - A State-Driven Git GUI"></span>
           
         </div>
 
@@ -232,8 +230,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-01-19 00:00" pubdate>
-          January 19, 2026 am
+        <time datetime="2026-03-23 12:00" pubdate>
+          March 23, 2026 pm
         </time>
       </span>
     
@@ -244,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          354 words
+          82 words
         
       </span>
     
@@ -255,7 +253,7 @@
         
         
         
-          3 mins
+          1 mins
         
       </span>
     
@@ -292,90 +290,40 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust</h1>
+            <h1 id="seo-header">Why I Built SyncTree - A State-Driven Git GUI</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="1-The-Challenge-Network-Rigidity-and-DNS-Pollution"><a href="#1-The-Challenge-Network-Rigidity-and-DNS-Pollution" class="headerlink" title="1. The Challenge: Network Rigidity and DNS Pollution"></a>1. The Challenge: Network Rigidity and DNS Pollution</h2><p>In restrictive network environments, standard ISP-provided hardware often becomes a bottleneck for power users and developers. The primary pain points I encountered were:</p>
+                <p><img src="/synctree.png" srcset="/img/loading.gif" lazyload alt="SyncTree"></p>
+<p>Git is an essential tool for development, but the learning curve can be steep for beginners. Existing graphical clients often pack too many features into a single view, creating visual clutter. I wanted a tool that handles version control with zero mental overhead.</p>
+<p>This led me to develop SyncTree. It is a lightweight Git desktop client built with PySide6, designed specifically to prevent user errors through strict state validation.</p>
+<h2 id="Core-Design-Choices"><a href="#Core-Design-Choices" class="headerlink" title="Core Design Choices"></a>Core Design Choices</h2><p>When planning SyncTree, I focused on error prevention and a clean visual hierarchy.</p>
 <ul>
-<li><strong>DNS Pollution &amp; Hijacking:</strong> Unreliable domain resolution leads to connection timeouts. While tools like <a target="_blank" rel="noopener" href="https://browserleaks.com/dns">BrowserLeaks</a> can estimate leaks, they are often insufficient in sophisticated environments. If an ISP utilizes <strong>DNAT (Destination NAT)</strong> to transparently hijack UDP 53 traffic, standard leak tests may return false negatives because the interception happens silently without cryptographic verification.</li>
-<li><strong>Lack of Granularity:</strong> Client-side ad-blocking (installing apps on every phone and laptop) is unscalable. I needed a network-level “sinkhole” to filter traffic for all devices—including IoT hardware that cannot run ad-blocking software.</li>
-<li><strong>Security Risks:</strong> The need to access home resources remotely without exposing dangerous ports to the public internet.</li>
+<li><strong>State-Driven Interaction</strong>: SyncTree uses a strict state machine polling mechanism via <code>QTimer</code>. If a Git operation does not match the current repository state, the corresponding UI button is automatically disabled and grayed out. This prevents invalid command combinations entirely.</li>
+<li><strong>Custom Dark Interface</strong>: I built a Material You dark theme. Instead of relying on standard system dialogs, the application uses custom modal windows with blurred backgrounds and lightweight bottom toast notifications.</li>
+<li><strong>Git Graph Rendering</strong>: The client parses ANSI terminal color escape codes from the native <code>git log</code> output. It then maps these codes to Unicode monospace geometric characters (like <code>●</code> and <code>│</code>) to draw the commit tree directly in the UI.</li>
 </ul>
-<p>As a Computer Science student, I needed a solution that offered low-latency secure tunneling, comprehensive ad-blocking, and secure remote management.</p>
-<h2 id="2-The-Solution-A-Split-Gateway-Topology"><a href="#2-The-Solution-A-Split-Gateway-Topology" class="headerlink" title="2. The Solution: A Split-Gateway Topology"></a>2. The Solution: A Split-Gateway Topology</h2><p><img src="/img/plan.png" srcset="/img/loading.gif" lazyload alt="My Network Architecture"></p>
-<p>To solve this, I designed a network architecture separating <strong>Data Link&#x2F;Physical layer responsibilities</strong> from <strong>Network&#x2F;Application layer processing</strong>.</p>
+<h2 id="Automation-and-Diagnostics"><a href="#Automation-and-Diagnostics" class="headerlink" title="Automation and Diagnostics"></a>Automation and Diagnostics</h2><p>To improve daily workflows, I integrated several background utilities.</p>
 <ul>
-<li><strong>Primary Router (Infrastructure):</strong> Handles Wi-Fi broadcasting and raw PPPoE negotiation (standard consumer router duties).</li>
-<li><strong>Secondary Gateway (Intelligence):</strong> An OpenWrt-based device acting as a “Bypass Gateway” (Side Router) to handle DNS resolution, traffic shaping, and ad-blocking.</li>
+<li><strong>Pull Request Detection</strong>: When pushing code, the application runs background checks to detect Pull Request or Merge Request URLs generated by GitHub or GitLab. It then opens these links in your default browser.</li>
+<li><strong>Network Diagnostics</strong>: If a sync or push operation fails, a diagnostic thread automatically pings loopback adapters and tests network API resolution to help identify connectivity issues or firewall blocks.</li>
+<li><strong>Localization</strong>: The UI supports multiple languages (EN&#x2F;CN) through a standalone <code>i18n</code> module that updates UI text dynamically.</li>
 </ul>
-<h3 id="Hardware-Prerequisites"><a href="#Hardware-Prerequisites" class="headerlink" title="Hardware Prerequisites"></a>Hardware Prerequisites</h3><ol>
-<li><strong>Primary Router:</strong> Any high-performance consumer router capable of AP mode.</li>
-<li><strong>Secondary Gateway:</strong> A device (e.g., Raspberry Pi, NanoPi, or x86 Mini PC) capable of running <strong>OpenWrt</strong>.</li>
-</ol>
-<h2 id="3-Implementation"><a href="#3-Implementation" class="headerlink" title="3. Implementation"></a>3. Implementation</h2><h3 id="Phase-0-Firmware-Preparation-Flashing-OpenWrt"><a href="#Phase-0-Firmware-Preparation-Flashing-OpenWrt" class="headerlink" title="Phase 0: Firmware Preparation (Flashing OpenWrt)"></a>Phase 0: Firmware Preparation (Flashing OpenWrt)</h3><p><em>Note: The flashing process varies significantly by hardware manufacturer. The following is a generalized workflow.</em></p>
-<p>Before configuring the network, the secondary gateway must be flashed with OpenWrt to gain root access and package management capabilities.</p>
-<ol>
-<li><strong>Select Hardware:</strong> Consult the <a target="_blank" rel="noopener" href="https://openwrt.org/toh/start">OpenWrt Table of Hardware</a> to ensure your device is supported.</li>
-<li><strong>Unlock Bootloader:</strong> For many consumer routers (e.g., Xiaomi, Redmi), you must first exploit the stock firmware to enable SSH and unlock the bootloader.</li>
-<li><strong>Flash Recovery Environment:</strong> It is best practice to flash a custom bootloader (like <strong>Breed</strong> or <strong>U-Boot</strong>) to prevent “bricking” the device.</li>
-<li><strong>Install OpenWrt:</strong><ul>
-<li>Download the <code>squashfs-sysupgrade.bin</code> specific to your target architecture (x86_64, ARM, MIPS).</li>
-<li>Upload the firmware via the recovery web interface or SSH.</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Example SSH flash command (device specific)</span><br>scp openwrt-firmware.bin root@192.168.1.1:/tmp/<br>ssh root@192.168.1.1 <span class="hljs-string">&quot;sysupgrade -v /tmp/openwrt-firmware.bin&quot;</span><br></code></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="Phase-1-Network-Topology-Configuration"><a href="#Phase-1-Network-Topology-Configuration" class="headerlink" title="Phase 1: Network Topology Configuration"></a>Phase 1: Network Topology Configuration</h3><p>I configured the primary router to handle the PPPoE connection to the ISP. Crucially, I <strong>disabled DHCP</strong> on the primary router to delegate address management to the OpenWrt gateway.</p>
+<h2 id="Technology-Stack"><a href="#Technology-Stack" class="headerlink" title="Technology Stack"></a>Technology Stack</h2><p>The project is kept intentionally minimal, relying on the following tools:</p>
 <ul>
-<li><strong>Primary Router IP:</strong> <code>10.0.0.1</code> (Static)</li>
-<li><strong>Mode:</strong> Wireless Access Point (AP)</li>
+<li><strong>Python 3.10+</strong>: The core logic layer.</li>
+<li><strong><a target="_blank" rel="noopener" href="https://doc.qt.io/qtforpython-6/">PySide6</a></strong>: Used for the graphical interface and animations.</li>
+<li><strong>Subprocess Module</strong>: Handles all communication with the Git executable. I configured <code>CREATE_NO_WINDOW</code> on all subprocess calls to prevent command prompt windows from flashing, which keeps the experience clean on Windows 11.</li>
 </ul>
-<p>Next, I configured the OpenWrt gateway:</p>
-<ol>
-<li>Connected via Ethernet to the Primary Router (LAN to LAN).</li>
-<li>Assigned Static IP: <code>10.0.0.5</code>.</li>
-<li>Configured as a <strong>Bypass Gateway</strong> (pointing its IPv4 Gateway to <code>10.0.0.1</code>).</li>
-</ol>
-<h3 id="Phase-2-Environment-Dependencies-OpenClash"><a href="#Phase-2-Environment-Dependencies-OpenClash" class="headerlink" title="Phase 2: Environment Dependencies &amp; OpenClash"></a>Phase 2: Environment Dependencies &amp; OpenClash</h3><p>Accessing the OpenWrt gateway via SSH, I updated the package lists and installed the necessary dependencies for traffic routing and kernel modules.</p>
-<p><em>Technical Note: OpenWrt utilizes <code>opkg</code> for package management.</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Update package lists</span><br>opkg update<br><br><span class="hljs-comment"># Install core dependencies and networking tools</span><br>opkg install bash iptables dnsmasq-full curl ca-bundle ipset ip-full \<br>iptables-mod-tproxy iptables-mod-extra ruby ruby-yaml kmod-tun \<br>kmod-inet-diag unzip luci-compat luci luci-base<br><br><span class="hljs-comment"># Install OpenClash (Secure Tunneling Client)</span><br><span class="hljs-comment"># Assuming the IPK is transferred to /tmp via SCP</span><br>opkg install /tmp/openclash.ipk<br></code></pre></td></tr></table></figure>
+<h2 id="Running-and-Building-Locally"><a href="#Running-and-Building-Locally" class="headerlink" title="Running and Building Locally"></a>Running and Building Locally</h2><p>If you want to test the application or build it yourself, you can do so easily in your terminal.</p>
+<p><strong>1. Setup</strong><br>Make sure you have Git and Python 3.10+ installed.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> [https://github.com/AndrewWangDev/SyncTree](https://github.com/AndrewWangDev/SyncTree)<br><span class="hljs-built_in">cd</span> SyncTree<br>pip install -r requirements.txt<br>python main.py<br></code></pre></td></tr></table></figure>
 
-<h3 id="Phase-3-AdGuard-Home-Integration"><a href="#Phase-3-AdGuard-Home-Integration" class="headerlink" title="Phase 3: AdGuard Home Integration"></a>Phase 3: AdGuard Home Integration</h3><p>To implement network-wide ad-blocking, I integrated AdGuard Home. This acts as a DNS sinkhole, intercepting DNS requests and blocking known tracking domains.</p>
-<p><em>(Note: Ensure you download the binary matching your CPU architecture, e.g., ARM64 vs AMD64).</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /tmp<br><span class="hljs-comment"># Example for ARM64 architecture</span><br>wget https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.43/AdGuardHome_linux_arm64.tar.gz<br>tar -zxvf AdGuardHome_linux_arm64.tar.gz<br><span class="hljs-built_in">cd</span> AdGuardHome<br>./AdGuardHome -s install<br></code></pre></td></tr></table></figure>
-
-<h3 id="Phase-4-Firewall-Port-Management"><a href="#Phase-4-Firewall-Port-Management" class="headerlink" title="Phase 4: Firewall &amp; Port Management"></a>Phase 4: Firewall &amp; Port Management</h3><p>I configured the OpenWrt firewall (<code>iptables</code> wrapper) to allow traffic on the management ports for both services (Port <code>3000</code> for AdGuard Home and <code>9090</code> for OpenClash).</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># /etc/config/firewall configuration via UCI</span><br>uci add firewall rule<br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].name=<span class="hljs-string">&#x27;Allow-AdGuard-WebUI&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].src=<span class="hljs-string">&#x27;lan&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].proto=<span class="hljs-string">&#x27;tcp&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].dest_port=<span class="hljs-string">&#x27;3000&#x27;</span><br>uci <span class="hljs-built_in">set</span> firewall.@rule[-1].target=<span class="hljs-string">&#x27;ACCEPT&#x27;</span><br>uci commit firewall<br>/etc/init.d/firewall restart<br></code></pre></td></tr></table></figure>
-
-<h3 id="Phase-5-The-DNS-Pipeline"><a href="#Phase-5-The-DNS-Pipeline" class="headerlink" title="Phase 5: The DNS Pipeline"></a>Phase 5: The DNS Pipeline</h3><p>This is the most critical configuration to ensure no DNS leaks occur and traffic is routed correctly.</p>
-<ol>
-<li><strong>OpenClash:</strong> Disabled built-in DNS sniffing to prevent conflicts.</li>
-<li><strong>AdGuard Home:</strong><ul>
-<li><strong>Listeners:</strong> <code>::1:53</code> and <code>0.0.0.0:53</code>.</li>
-<li><strong>Upstream DNS:</strong> Points to the OpenClash local DNS port (e.g., <code>127.0.0.1:7874</code>).</li>
-<li><strong>DHCP Server:</strong> Enabled on AdGuard Home.<ul>
-<li><strong>Gateway set to:</strong> <code>10.0.0.5</code> (The OpenWrt device).</li>
-<li><strong>Subnet:</strong> <code>10.0.0.0/8</code>.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p><strong>The Traffic Flow:</strong><br><code>Client Device</code> -&gt; <code>AdGuard Home (Filter Ads)</code> -&gt; <code>OpenClash (Route Traffic/Tunnel)</code> -&gt; <code>Internet</code></p>
-<h3 id="Phase-6-Secure-Remote-Access-Cloudflare-Zero-Trust"><a href="#Phase-6-Secure-Remote-Access-Cloudflare-Zero-Trust" class="headerlink" title="Phase 6: Secure Remote Access (Cloudflare Zero Trust)"></a>Phase 6: Secure Remote Access (Cloudflare Zero Trust)</h3><p>To manage the home network from outside without exposing ports (and risking security breaches), I utilized <strong>Cloudflared</strong>.</p>
-<ol>
-<li>Installed <code>cloudflared</code> on OpenWrt.</li>
-<li>Created a Tunnel via the Cloudflare Zero Trust Dashboard.</li>
-<li>Mapped <code>10.0.0.5:80</code> (LuCI Interface) to a custom subdomain (e.g., <code>admin.mydomain.com</code>).</li>
-<li><strong>Security Policy:</strong> Enabled Zero Trust authentication (requiring email OTP) to access the subdomain.</li>
-</ol>
-<h2 id="4-Impact-and-Results"><a href="#4-Impact-and-Results" class="headerlink" title="4. Impact and Results"></a>4. Impact and Results</h2><p>By shifting from a standard ISP setup to this custom “Split-Gateway” architecture, I achieved:</p>
-<ul>
-<li><strong>Enhanced Privacy:</strong> Encrypted DNS resolution prevents ISP snooping and mitigates DNAT hijacking.</li>
-<li><strong>Network Efficiency:</strong> Intrusive ads are blocked at the DNS level before reaching client devices, saving bandwidth.</li>
-<li><strong>Zero-Trust Security:</strong> Administrative access is entirely hidden behind Cloudflare’s edge network, eliminating the attack surface of open ports.<br><img src="/img/res.png" srcset="/img/loading.gif" lazyload alt="DNS Leak Test Result"><br><img src="/img/Adblock.png" srcset="/img/loading.gif" lazyload alt="Adblock Result"></li>
-</ul>
+<p><strong>2. Build a Standalone Executable</strong><br>To package the client into a single <code>.exe</code> file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python build.py<br></code></pre></td></tr></table></figure>
+<p>The compiled executable will be saved in the <code>dist/synctree.exe</code> directory.</p>
+<p>SyncTree is open source and available under the <strong><a target="_blank" rel="noopener" href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU GPL v2.0</a></strong>. You can check out the source code or report issues on the GitHub repository.</p>
 
                 
               </div>
@@ -394,7 +342,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Infrastructure/" class="category-chain-item">Infrastructure</a>
+  <a href="/categories/Personal-Projects/" class="category-chain-item">Personal Projects</a>
   
   
 
@@ -409,15 +357,15 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Network-Engineering/" class="print-no-link">#Network Engineering</a>
+        <a href="/tags/Git/" class="print-no-link">#Git</a>
       
-        <a href="/tags/OpenWrt/" class="print-no-link">#OpenWrt</a>
+        <a href="/tags/Open-Source/" class="print-no-link">#Open Source</a>
       
-        <a href="/tags/Home-Lab/" class="print-no-link">#Home Lab</a>
+        <a href="/tags/Python/" class="print-no-link">#Python</a>
       
-        <a href="/tags/Cloudflare-Zero-Trust/" class="print-no-link">#Cloudflare Zero Trust</a>
+        <a href="/tags/PySide6/" class="print-no-link">#PySide6</a>
       
-        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+        <a href="/tags/GUI/" class="print-no-link">#GUI</a>
       
     </div>
   
@@ -429,8 +377,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Cloudflare Zero Trust</div>
-      <div>https://andrewwangdev.com/2026/01/19/day4/</div>
+      <div>Why I Built SyncTree - A State-Driven Git GUI</div>
+      <div>https://andrewwangdev.com/2026/03/23/day9/</div>
     </div>
     <div class="license-meta">
       
@@ -442,7 +390,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>January 19, 2026</div>
+          <div>March 23, 2026</div>
         </div>
       
       
@@ -474,18 +422,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/23/day5/" title="Toolkit — Windows Floating System Monitor">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Toolkit — Windows Floating System Monitor</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/04/day3/" title="Essential VPS Setup: Securing SSH and Enabling BBR Optimization">
-                        <span class="hidden-mobile">Essential VPS Setup: Securing SSH and Enabling BBR Optimization</span>
+                      <a href="/2026/01/29/day8/" title="Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching">
+                        <span class="hidden-mobile">Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
