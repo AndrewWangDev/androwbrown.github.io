@@ -4,7 +4,7 @@
   
   
   <entry>
-    <title>Why I Built SyncTree - A State-Driven Git GUI</title>
+    <title>SyncTree - A State-Driven, Beginner-friendly and Unofficial Git GUI</title>
     <link href="/2026/03/23/day9/"/>
     <url>/2026/03/23/day9/</url>
     
@@ -37,7 +37,7 @@
   
   
   <entry>
-    <title>Solving the ECH Key Rotation Dilemma for Exclave &amp; V2Ray Clients via Server-Side Patching</title>
+    <title>Solving the ECH Key Rotation Dilemma for Exclave</title>
     <link href="/2026/01/29/day8/"/>
     <url>/2026/01/29/day8/</url>
     
@@ -46,8 +46,6 @@
     
     <categories>
       
-      <category>Projects</category>
-      
       <category>DevOps</category>
       
     </categories>
@@ -55,13 +53,13 @@
     
     <tags>
       
+      <tag>Privacy</tag>
+      
       <tag>Network Engineering</tag>
       
       <tag>Python</tag>
       
       <tag>Cloudflare</tag>
-      
-      <tag>Privacy</tag>
       
       <tag>ECH</tag>
       
@@ -80,7 +78,7 @@
     <link href="/2026/01/28/day7/"/>
     <url>/2026/01/28/day7/</url>
     
-    <content type="html"><![CDATA[<p>Finding the fastest Cloudflare IP for regions with severe internet censorship such as China can often feel like searching for a needle in a haystack. </p><p><strong>CF-IP-Speedtest (Material Edition)</strong>.</p><h2 id="The-Problem"><a href="#The-Problem" class="headerlink" title="The Problem"></a>The Problem</h2><p>Cloudflare has massive IP ranges. Scanning all of them is impossible for a quick desktop utility. Most tools either:</p><ol><li>Scan sequentially (too slow).</li><li>Use ICMP Pings (often blocked or prioritized differently than actual traffic).</li><li>Have clunky, outdated generic UIs.</li></ol><h2 id="The-Solution"><a href="#The-Solution" class="headerlink" title="The Solution"></a>The Solution</h2><p>I decided to build a standalone Windows application using <strong>Python</strong> and <strong>CustomTkinter</strong> to solve this.</p><h3 id="Key-Features"><a href="#Key-Features" class="headerlink" title="Key Features"></a>Key Features</h3><ul><li><strong>Material Design 3</strong>: Fits right into the modern Windows 11 aesthetic.</li><li><strong>Smart Sampling</strong>: Instead of brute-forcing, it randomly samples IPs from the vast CIDR ranges.</li><li><strong>Real TCP Testing</strong>: It performs actual TCP handshakes on port 443. This mimics real web traffic latency much better than a simple ping.</li><li><strong>Concurrent Scanning</strong>: Uses multi-threading to check 50+ IPs simultaneously.</li></ul><h2 id="Under-the-Hood"><a href="#Under-the-Hood" class="headerlink" title="Under the Hood"></a>Under the Hood</h2><p>The core logic revolves around a producer-consumer pattern.</p><ol><li><strong>IP Generator</strong>: Parses <code>ip.txt</code> containing CIDR blocks and pushes random IPs into a queue.</li><li><strong>Thread Pool</strong>: A pool of workers picks up IPs and attempts a TCP connect.</li><li><strong>UI Controller</strong>: Updates the interface in real-time as results come in, maintaining a sorted “Top 5” list.</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Simplified snippet of the testing logic</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_connect_latency</span>(<span class="hljs-params">ip, port=<span class="hljs-number">443</span>, timeout=<span class="hljs-number">0.5</span></span>):<br>    start_time = time.time()<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">with</span> socket.create_connection((ip, port), timeout=timeout):<br>            <span class="hljs-keyword">return</span> (time.time() - start_time) * <span class="hljs-number">1000</span><br>    <span class="hljs-keyword">except</span> OSError:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br></code></pre></td></tr></table></figure><h2 id="UI-Showcase"><a href="#UI-Showcase" class="headerlink" title="UI Showcase"></a>UI Showcase</h2><p>I used <code>CustomTkinter</code> to achieve that sleek look without the overhead of Electron.</p><p><img src="/img/1.png" alt="Results 1"></p><p><em>The clean, distraction-free interface.</em></p><p><img src="/img/2.png" alt="Results 2"></p><p><em>Real-time sorting of the best IPs found.</em></p><h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><p>You can grab the latest executable from the releases page or check out the source code on GitHub.</p><p><a href="https://github.com/AndrewWangDev/cf_ip_selector">Download CF-Speedtest</a></p>]]></content>
+    <content type="html"><![CDATA[<p>Finding the fastest Cloudflare IP for regions with severe internet censorship such as China can often feel like searching for a needle in a haystack. </p><h2 id="The-Problem"><a href="#The-Problem" class="headerlink" title="The Problem"></a>The Problem</h2><p>Cloudflare has massive IP ranges. Scanning all of them is impossible for a quick desktop utility. Most tools either:</p><ol><li>Scan sequentially (too slow).</li><li>Use ICMP Pings (often blocked or prioritized differently than actual traffic).</li><li>Have clunky, outdated generic UIs.</li></ol><h2 id="The-Solution"><a href="#The-Solution" class="headerlink" title="The Solution"></a>The Solution</h2><p>I decided to build a standalone Windows application using <strong>Python</strong> and <strong>CustomTkinter</strong> to solve this.</p><h3 id="Key-Features"><a href="#Key-Features" class="headerlink" title="Key Features"></a>Key Features</h3><ul><li><strong>Material Design 3</strong>: Fits right into the modern Windows 11 aesthetic.</li><li><strong>Smart Sampling</strong>: Instead of brute-forcing, it randomly samples IPs from the vast CIDR ranges.</li><li><strong>Real TCP Testing</strong>: It performs actual TCP handshakes on port 443. This mimics real web traffic latency much better than a simple ping.</li><li><strong>Concurrent Scanning</strong>: Uses multi-threading to check 50+ IPs simultaneously.</li></ul><h2 id="Under-the-Hood"><a href="#Under-the-Hood" class="headerlink" title="Under the Hood"></a>Under the Hood</h2><p>The core logic revolves around a producer-consumer pattern.</p><ol><li><strong>IP Generator</strong>: Parses <code>ip.txt</code> containing CIDR blocks and pushes random IPs into a queue.</li><li><strong>Thread Pool</strong>: A pool of workers picks up IPs and attempts a TCP connect.</li><li><strong>UI Controller</strong>: Updates the interface in real-time as results come in, maintaining a sorted “Top 5” list.</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Simplified snippet of the testing logic</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_connect_latency</span>(<span class="hljs-params">ip, port=<span class="hljs-number">443</span>, timeout=<span class="hljs-number">0.5</span></span>):<br>    start_time = time.time()<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">with</span> socket.create_connection((ip, port), timeout=timeout):<br>            <span class="hljs-keyword">return</span> (time.time() - start_time) * <span class="hljs-number">1000</span><br>    <span class="hljs-keyword">except</span> OSError:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br></code></pre></td></tr></table></figure><h2 id="UI-Showcase"><a href="#UI-Showcase" class="headerlink" title="UI Showcase"></a>UI Showcase</h2><p>I used <code>CustomTkinter</code> to achieve that sleek look without the overhead of Electron.</p><p><img src="/img/1.png" alt="Results 1"></p><p><em>The clean, distraction-free interface.</em></p><p><img src="/img/2.png" alt="Results 2"></p><p><em>Real-time sorting of the best IPs found.</em></p><h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><p>You can grab the latest executable from the releases page or check out the source code on GitHub.</p><p><a href="https://github.com/AndrewWangDev/cf_ip_selector">Download CF-Speedtest</a></p>]]></content>
     
     
     <categories>
@@ -149,8 +147,6 @@
     
     <categories>
       
-      <category>Tools</category>
-      
       <category>Open Source</category>
       
     </categories>
@@ -173,7 +169,7 @@
   
   
   <entry>
-    <title>Architecting a Resilient Home Network: OpenWrt, AdGuard Home, and Zero Trust</title>
+    <title>Architecting a Resilient, Zero Trust Home Network</title>
     <link href="/2026/01/19/day4/"/>
     <url>/2026/01/19/day4/</url>
     
