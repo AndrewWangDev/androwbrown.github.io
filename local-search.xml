@@ -20,13 +20,13 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>Git</tag>
       
-      <tag>PySide6</tag>
-      
       <tag>Open Source</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>PySide6</tag>
       
       <tag>GUI</tag>
       
@@ -53,19 +53,19 @@
     
     <tags>
       
+      <tag>Network Engineering</tag>
+      
       <tag>Privacy</tag>
       
-      <tag>Python</tag>
+      <tag>ECH</tag>
       
       <tag>Cloudflare</tag>
-      
-      <tag>ECH</tag>
       
       <tag>V2Ray</tag>
       
       <tag>Exclave</tag>
       
-      <tag>Network Engineering</tag>
+      <tag>Python</tag>
       
     </tags>
     
@@ -90,9 +90,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>Cloudflare</tag>
+      
+      <tag>Python</tag>
       
       <tag>Networking</tag>
       
@@ -121,13 +121,13 @@
     
     <tags>
       
+      <tag>Privacy</tag>
+      
       <tag>Android</tag>
       
       <tag>Jetpack Compose</tag>
       
       <tag>Kotlin</tag>
-      
-      <tag>Privacy</tag>
       
       <tag>Regex</tag>
       
@@ -253,9 +253,9 @@
       
       <tag>Git</tag>
       
-      <tag>Open Source</tag>
-      
       <tag>GitHub</tag>
+      
+      <tag>Open Source</tag>
       
       <tag>Workflow</tag>
       
