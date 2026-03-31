@@ -55,11 +55,11 @@
       
       <tag>Network Engineering</tag>
       
+      <tag>Privacy</tag>
+      
       <tag>Python</tag>
       
       <tag>Cloudflare</tag>
-      
-      <tag>Privacy</tag>
       
       <tag>ECH</tag>
       
@@ -121,13 +121,13 @@
     
     <tags>
       
-      <tag>Privacy</tag>
-      
       <tag>Android</tag>
       
       <tag>Jetpack Compose</tag>
       
       <tag>Kotlin</tag>
+      
+      <tag>Privacy</tag>
       
       <tag>Regex</tag>
       
@@ -266,6 +266,37 @@
   
   
   <entry>
+    <title>Understanding DNS Leaks and Risks in Split-Tunneling Networks</title>
+    <link href="/2025/08/16/hello-world/"/>
+    <url>/2025/08/16/hello-world/</url>
+    
+    <content type="html"><![CDATA[<p>DNS (Domain Name System) is the phonebook of the Internet. However, because it defaults to UDP port 53 and transmits in plaintext, it is notoriously easy to monitor, spoof, or hijack.</p><h2 id="The-Mechanics-of-DNS"><a href="#The-Mechanics-of-DNS" class="headerlink" title="The Mechanics of DNS"></a>The Mechanics of DNS</h2><h3 id="How-Resolution-Works"><a href="#How-Resolution-Works" class="headerlink" title="How Resolution Works"></a>How Resolution Works</h3><p>When you request a URL, the browser extracts the domain and follows a strict hierarchy: <strong>Browser Cache -&gt; System Hosts -&gt; Network Interface DNS</strong>.</p><p>If not defined locally, the request goes to the recursive resolver (usually your ISP). If the ISP doesn’t have it cached, it initiates an iterative query to the Root, TLD, and Authoritative Name Servers.</p><img src="/img/dns.png" alt="DNS Iterative Query Process" style="width: 100%; max-width: 600px; margin: 10px 0;"/><p>More info: <a href="https://www.google.com/search?q=DNS">Search in Google</a></p><h3 id="Spoofing-and-Hijacking"><a href="#Spoofing-and-Hijacking" class="headerlink" title="Spoofing and Hijacking"></a>Spoofing and Hijacking</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nslookup google.com<br><span class="hljs-comment"># Result: Often returns a bogon IP or blackhole address in restricted networks</span><br></code></pre></td></tr></table></figure><p>In many network environments, DNS traffic is manipulated in three ways:</p><ol><li><strong>ISP Hijacking</strong>: Local ISPs often monitor UDP:53 to log user data or reduce inter-network settlement costs.</li><li><strong>Middlebox Interference</strong>: At international gateways, traffic matching specific blacklists is spoofed, returning invalid IP addresses (DNS Poisoning).</li><li><strong>Intranet Auditing</strong>: Schools and enterprises often redirect all 53-port traffic to internal audit devices.</li></ol><p>More info: <a href="https://en.wikipedia.org/wiki/DNS_spoofing">Wikipedia: DNS Spoofing</a></p><h3 id="Why-“Direct-IP-Access”-Doesn’t-Work"><a href="#Why-“Direct-IP-Access”-Doesn’t-Work" class="headerlink" title="Why “Direct IP Access” Doesn’t Work"></a>Why “Direct IP Access” Doesn’t Work</h3><p>If DNS is poisoned, why can’t we just type the IP address directly?</p><p>The answer lies in <strong>SNI (Server Name Indication)</strong> used in HTTPS handshakes.</p><ul><li>When a client sends a <code>Client Hello</code> packet to establish a TLS connection, it must include the SNI field to tell the server <em>which</em> certificate to present.</li><li>If you access via a raw IP, the SNI field is empty.</li><li>Modern servers (especially CDNs) host thousands of domains on a single IP. Without SNI, the server returns a default (incorrect) certificate, causing the handshake to fail with errors like <code>CERT_COMMON_NAME_INVALID</code>.</li></ul><h2 id="The-Risk-of-Split-Tunneling"><a href="#The-Risk-of-Split-Tunneling" class="headerlink" title="The Risk of Split-Tunneling"></a>The Risk of Split-Tunneling</h2><p>I generally <strong>advise against</strong> simple split-tunneling strategies for sensitive traffic. Using OpenClash as an example, improper DNS routing often leads to privacy leaks.</p><p>OpenClash typically handles DNS requests via a virtual interface. Even with intelligent routing, risks exist.</p><h3 id="The-“Fake-IP”-Fallback-Issue"><a href="#The-“Fake-IP”-Fallback-Issue" class="headerlink" title="The “Fake-IP” Fallback Issue"></a>The “Fake-IP” Fallback Issue</h3><p>In <code>fake-ip</code> mode, if a request doesn’t match a specific rule, the client has to decide how to route it.</p><ol><li>It resolves the domain using both the <strong>Remote&#x2F;Encrypted DNS</strong> and the <strong>Local&#x2F;ISP DNS</strong> in parallel to determine the fastest route.</li><li>If the Local ISP DNS responds faster (which is common for CDNs), the system might accept that IP.</li><li><strong>The Leak</strong>: If the resolved IP triggers a <code>DIRECT</code> rule, the traffic connects directly through your local gateway. This exposes your request to the local ISP, completely bypassing the encryption tunnel.</li></ol><h3 id="Why-“IP-If-Not-Match”-Isn’t-Perfect"><a href="#Why-“IP-If-Not-Match”-Isn’t-Perfect" class="headerlink" title="Why “IP If Not Match” Isn’t Perfect"></a>Why “IP If Not Match” Isn’t Perfect</h3><p>Other strategies like <code>Redir-Host</code> (IP If Not Match) also have flaws. They rely on the local DNS to resolve the domain <em>first</em> to check against IP rules. This initial resolution step itself is a <strong>DNS Leak</strong>—your ISP already knows what domain you are trying to resolve before the proxy client even decides whether to proxy it.</p><h2 id="My-Solution-The-“Clean-Separation”-Architecture"><a href="#My-Solution-The-“Clean-Separation”-Architecture" class="headerlink" title="My Solution: The “Clean Separation” Architecture"></a>My Solution: The “Clean Separation” Architecture</h2><p>To fix this, I separate DNS resolution from traffic routing:</p><ol><li><strong>OpenWrt</strong> acts as the gateway.</li><li><strong>AdGuard Home</strong> listens on port 53, handling ad-blocking and forwarding upstream queries.</li><li><strong>OpenClash</strong> (listening on a non-standard port) takes over the upstream DNS over encrypted channels (DoH&#x2F;DoT), ensuring no fallback to the local ISP.</li></ol><p><em>(For the complete implementation guide, see my follow-up post: <a href="/2026/01/19/day4/">Architecting a Resilient Home Network</a>)</em></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Network Engineering</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>DNS</tag>
+      
+      <tag>Network Security</tag>
+      
+      <tag>OpenClash</tag>
+      
+      <tag>AdGuardHome</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Mastering `this` Binding and Event Delegation in React JSX</title>
     <link href="/2025/08/16/day1/"/>
     <url>/2025/08/16/day1/</url>
@@ -291,37 +322,6 @@
       <tag>Lexical Scoping</tag>
       
       <tag>Event Delegation</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Understanding DNS Leaks and Risks in Split-Tunneling Networks</title>
-    <link href="/2025/08/16/hello-world/"/>
-    <url>/2025/08/16/hello-world/</url>
-    
-    <content type="html"><![CDATA[<p>DNS (Domain Name System) is the phonebook of the Internet. However, because it defaults to UDP port 53 and transmits in plaintext, it is notoriously easy to monitor, spoof, or hijack.</p><h2 id="The-Mechanics-of-DNS"><a href="#The-Mechanics-of-DNS" class="headerlink" title="The Mechanics of DNS"></a>The Mechanics of DNS</h2><h3 id="How-Resolution-Works"><a href="#How-Resolution-Works" class="headerlink" title="How Resolution Works"></a>How Resolution Works</h3><p>When you request a URL, the browser extracts the domain and follows a strict hierarchy: <strong>Browser Cache -&gt; System Hosts -&gt; Network Interface DNS</strong>.</p><p>If not defined locally, the request goes to the recursive resolver (usually your ISP). If the ISP doesn’t have it cached, it initiates an iterative query to the Root, TLD, and Authoritative Name Servers.</p><img src="/img/dns.png" alt="DNS Iterative Query Process" style="width: 100%; max-width: 600px; margin: 10px 0;"/><p>More info: <a href="https://www.google.com/search?q=DNS">Search in Google</a></p><h3 id="Spoofing-and-Hijacking"><a href="#Spoofing-and-Hijacking" class="headerlink" title="Spoofing and Hijacking"></a>Spoofing and Hijacking</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nslookup google.com<br><span class="hljs-comment"># Result: Often returns a bogon IP or blackhole address in restricted networks</span><br></code></pre></td></tr></table></figure><p>In many network environments, DNS traffic is manipulated in three ways:</p><ol><li><strong>ISP Hijacking</strong>: Local ISPs often monitor UDP:53 to log user data or reduce inter-network settlement costs.</li><li><strong>Middlebox Interference</strong>: At international gateways, traffic matching specific blacklists is spoofed, returning invalid IP addresses (DNS Poisoning).</li><li><strong>Intranet Auditing</strong>: Schools and enterprises often redirect all 53-port traffic to internal audit devices.</li></ol><p>More info: <a href="https://en.wikipedia.org/wiki/DNS_spoofing">Wikipedia: DNS Spoofing</a></p><h3 id="Why-“Direct-IP-Access”-Doesn’t-Work"><a href="#Why-“Direct-IP-Access”-Doesn’t-Work" class="headerlink" title="Why “Direct IP Access” Doesn’t Work"></a>Why “Direct IP Access” Doesn’t Work</h3><p>If DNS is poisoned, why can’t we just type the IP address directly?</p><p>The answer lies in <strong>SNI (Server Name Indication)</strong> used in HTTPS handshakes.</p><ul><li>When a client sends a <code>Client Hello</code> packet to establish a TLS connection, it must include the SNI field to tell the server <em>which</em> certificate to present.</li><li>If you access via a raw IP, the SNI field is empty.</li><li>Modern servers (especially CDNs) host thousands of domains on a single IP. Without SNI, the server returns a default (incorrect) certificate, causing the handshake to fail with errors like <code>CERT_COMMON_NAME_INVALID</code>.</li></ul><h2 id="The-Risk-of-Split-Tunneling"><a href="#The-Risk-of-Split-Tunneling" class="headerlink" title="The Risk of Split-Tunneling"></a>The Risk of Split-Tunneling</h2><p>I generally <strong>advise against</strong> simple split-tunneling strategies for sensitive traffic. Using OpenClash as an example, improper DNS routing often leads to privacy leaks.</p><p>OpenClash typically handles DNS requests via a virtual interface. Even with intelligent routing, risks exist.</p><h3 id="The-“Fake-IP”-Fallback-Issue"><a href="#The-“Fake-IP”-Fallback-Issue" class="headerlink" title="The “Fake-IP” Fallback Issue"></a>The “Fake-IP” Fallback Issue</h3><p>In <code>fake-ip</code> mode, if a request doesn’t match a specific rule, the client has to decide how to route it.</p><ol><li>It resolves the domain using both the <strong>Remote&#x2F;Encrypted DNS</strong> and the <strong>Local&#x2F;ISP DNS</strong> in parallel to determine the fastest route.</li><li>If the Local ISP DNS responds faster (which is common for CDNs), the system might accept that IP.</li><li><strong>The Leak</strong>: If the resolved IP triggers a <code>DIRECT</code> rule, the traffic connects directly through your local gateway. This exposes your request to the local ISP, completely bypassing the encryption tunnel.</li></ol><h3 id="Why-“IP-If-Not-Match”-Isn’t-Perfect"><a href="#Why-“IP-If-Not-Match”-Isn’t-Perfect" class="headerlink" title="Why “IP If Not Match” Isn’t Perfect"></a>Why “IP If Not Match” Isn’t Perfect</h3><p>Other strategies like <code>Redir-Host</code> (IP If Not Match) also have flaws. They rely on the local DNS to resolve the domain <em>first</em> to check against IP rules. This initial resolution step itself is a <strong>DNS Leak</strong>—your ISP already knows what domain you are trying to resolve before the proxy client even decides whether to proxy it.</p><h2 id="My-Solution-The-“Clean-Separation”-Architecture"><a href="#My-Solution-The-“Clean-Separation”-Architecture" class="headerlink" title="My Solution: The “Clean Separation” Architecture"></a>My Solution: The “Clean Separation” Architecture</h2><p>To fix this, I separate DNS resolution from traffic routing:</p><ol><li><strong>OpenWrt</strong> acts as the gateway.</li><li><strong>AdGuard Home</strong> listens on port 53, handling ad-blocking and forwarding upstream queries.</li><li><strong>OpenClash</strong> (listening on a non-standard port) takes over the upstream DNS over encrypted channels (DoH&#x2F;DoT), ensuring no fallback to the local ISP.</li></ol><p><em>(For the complete implementation guide, see my follow-up post: <a href="/2026/01/19/day4/">Architecting a Resilient Home Network</a>)</em></p>]]></content>
-    
-    
-    <categories>
-      
-      <category>Network Engineering</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>DNS</tag>
-      
-      <tag>Network Security</tag>
-      
-      <tag>OpenClash</tag>
-      
-      <tag>AdGuardHome</tag>
       
     </tags>
     
