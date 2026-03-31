@@ -55,17 +55,17 @@
       
       <tag>Network Engineering</tag>
       
+      <tag>Python</tag>
+      
+      <tag>Cloudflare</tag>
+      
       <tag>Privacy</tag>
       
       <tag>ECH</tag>
       
-      <tag>Cloudflare</tag>
-      
       <tag>V2Ray</tag>
       
       <tag>Exclave</tag>
-      
-      <tag>Python</tag>
       
     </tags>
     
@@ -90,9 +90,9 @@
     
     <tags>
       
-      <tag>Cloudflare</tag>
-      
       <tag>Python</tag>
+      
+      <tag>Cloudflare</tag>
       
       <tag>Networking</tag>
       
@@ -185,6 +185,8 @@
     
     <tags>
       
+      <tag>Linux</tag>
+      
       <tag>Network Engineering</tag>
       
       <tag>OpenWrt</tag>
@@ -192,8 +194,6 @@
       <tag>Home Lab</tag>
       
       <tag>Cloudflare Zero Trust</tag>
-      
-      <tag>Linux</tag>
       
     </tags>
     
@@ -218,9 +218,9 @@
     
     <tags>
       
-      <tag>Linux</tag>
-      
       <tag>VPS</tag>
+      
+      <tag>Linux</tag>
       
       <tag>Security</tag>
       
