@@ -27,7 +27,7 @@
 <meta property="og:description" content="A guide to the two first-day tasks for any new VPS: mitigating brute-force attacks by changing the SSH port, and maximizing network throughput with a BBR optimization script.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-01-04T03:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-27T14:16:43.721Z">
+<meta property="article:modified_time" content="2026-04-14T13:12:47.734Z">
 <meta property="article:author" content="Andrew Wang Dev">
 <meta property="article:tag" content="VPS">
 <meta property="article:tag" content="Linux">
@@ -240,7 +240,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          190 words
+          177 words
         
       </span>
     
@@ -295,7 +295,16 @@
                 
                 <p>When provisioning a fresh VPS, two critical configurations yield the highest return on investment: securing the access point and unthrottling the network. Changing the default SSH port significantly reduces automated brute-force attempts, while enabling the BBR congestion control algorithm drastically improves throughput on high-latency links.</p>
 <p>Here is the standardized workflow for these initial setups.</p>
-<h2 id="Part-1-Hardening-SSH-Access"><a href="#Part-1-Hardening-SSH-Access" class="headerlink" title="Part 1: Hardening SSH Access"></a>Part 1: Hardening SSH Access</h2><p>The default port 22 is the primary target for botnets. Moving SSH to a non-standard port is the most effective “low-hanging fruit” for server security.</p>
+<div style="margin: 35px 0; background-color: #f8f9fc; padding: 25px; border-radius: 12px; border-left: 5px solid #2563eb; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+    <h3 style="margin-top: 0; color: #1e293b; font-size: 1.3em;">💡 Want to Automate This?</h3>
+    <p style="color: #475569; margin-bottom: 20px; font-size: 1em;">Skip the manual configuration. Generate one-click optimization scripts and discover top-tier VPS providers tailored to your needs.</p>
+<a href="https://vps.andrewwangdev.com" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);">
+        🚀 Visit EasyVPSSelect
+    </a>
+</div>
+## Part 1: Hardening SSH Access
+
+<p>The default port 22 is the primary target for botnets. Moving SSH to a non-standard port is the most effective “low-hanging fruit” for server security.</p>
 <h3 id="1-Firewall-Configuration-Prerequisite"><a href="#1-Firewall-Configuration-Prerequisite" class="headerlink" title="1. Firewall Configuration (Prerequisite)"></a>1. Firewall Configuration (Prerequisite)</h3><p>Before touching any config files, ensure your Cloud Provider’s firewall (Security Group) allows traffic on your new target port.</p>
 <ul>
 <li><strong>Action:</strong> Select a port between <code>1024</code> and <code>65535</code> (e.g., <code>19220</code>).</li>
@@ -304,8 +313,7 @@
 <h3 id="2-Handle-Systemd-Socket-Activation-Ubuntu-22-04"><a href="#2-Handle-Systemd-Socket-Activation-Ubuntu-22-04" class="headerlink" title="2. Handle Systemd Socket Activation (Ubuntu 22.04+)"></a>2. Handle Systemd Socket Activation (Ubuntu 22.04+)</h3><p>On modern Ubuntu systems, SSH is often socket-activated, meaning editing <code>sshd_config</code> alone will not work. You must revert to the standard service mode.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Stop and disable the socket activator</span><br><span class="hljs-built_in">sudo</span> systemctl stop ssh.socket<br><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">disable</span> ssh.socket<br><br><span class="hljs-comment"># Enable and start the standard service</span><br><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> ssh.service<br><span class="hljs-built_in">sudo</span> systemctl start ssh.service<br></code></pre></td></tr></table></figure>
 
-<h3 id="3-Edit-sshd-config"><a href="#3-Edit-sshd-config" class="headerlink" title="3. Edit sshd_config"></a>3. Edit sshd_config</h3><p>sytem</p>
-<p>Safely modify the daemon configuration.</p>
+<h3 id="3-Edit-sshd-config"><a href="#3-Edit-sshd-config" class="headerlink" title="3. Edit sshd_config"></a>3. Edit sshd_config</h3><p>Safely modify the daemon configuration.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Backup existing config</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">cp</span> /etc/ssh/sshd_config /etc/ssh/sshd_config.bak<br><br><span class="hljs-comment"># Edit the file</span><br><span class="hljs-built_in">sudo</span> nano /etc/ssh/sshd_config<br></code></pre></td></tr></table></figure>
 
 <p><strong>The Safety Strategy:</strong> Do not delete Port 22 yet. Add the new port <em>below</em> it. This allows you to connect via either port during the transition.</p>
@@ -324,12 +332,13 @@
 <li>Restart SSH: <code>sudo systemctl restart ssh</code>.</li>
 <li>Remove the rule for Port 22 from your Cloud Provider’s firewall.</li>
 </ol>
-<h2 id="Part-2-Network-Optimization-BBR"><a href="#Part-2-Network-Optimization-BBR" class="headerlink" title="Part 2: Network Optimization (BBR)"></a>Part 2: Network Optimization (BBR)</h2><p>For network optimization, we will utilize <code>vps_optimize</code>, an open-source shell script that automates kernel parameter tuning. It enables Google’s BBR algorithm, optimizes TCP buffers, and adjusts Fair Queue (FQ) management.</p>
+<h2 id="Part-2-Network-Optimization-BBR"><a href="#Part-2-Network-Optimization-BBR" class="headerlink" title="Part 2: Network Optimization (BBR)"></a>Part 2: Network Optimization (BBR)</h2><p><em>(Tip: You can also generate a custom execution script automatically via <a target="_blank" rel="noopener" href="https://vps.andrewwangdev.com/">EasyVPSSelect</a>.)</em></p>
+<p>For network optimization, we will utilize <code>vps_optimize</code>, an open-source shell script that automates kernel parameter tuning. It enables Google’s BBR algorithm, optimizes TCP buffers, and adjusts Fair Queue (FQ) management.</p>
 <p><strong>Repository:</strong> <a target="_blank" rel="noopener" href="https://github.com/androwbrown/vps_optimize">github.com&#x2F;androwbrown&#x2F;vps_optimize</a></p>
 <h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><p><strong>Note:</strong> This script modifies <code>/etc/sysctl.conf</code>. A backup is created automatically.</p>
 <ol>
 <li><p><strong>Download Script</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget [https://raw.githubusercontent.com/androwbrown/vps_optimize/main/optimize.sh](https://raw.githubusercontent.com/androwbrown/vps_optimize/main/optimize.sh)<br><span class="hljs-comment"># Or via curl:</span><br><span class="hljs-comment"># curl -O [https://raw.githubusercontent.com/androwbrown/vps_optimize/main/optimize.sh](https://raw.githubusercontent.com/androwbrown/vps_optimize/main/optimize.sh)</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://raw.githubusercontent.com/androwbrown/vps_optimize/main/optimize.sh<br><span class="hljs-comment"># Or via curl:</span><br><span class="hljs-comment"># curl -O https://raw.githubusercontent.com/androwbrown/vps_optimize/main/optimize.sh</span><br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Execute</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> +x optimize.sh<br><span class="hljs-built_in">sudo</span> ./optimize.sh<br></code></pre></td></tr></table></figure>
